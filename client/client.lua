@@ -1,18 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
-local function catch(what)
-    return what[1]
-end
- 
- local function try(what)
-    status, result = pcall(what[1])
-    if not status then
-       what[2](result)
-    end
-    return result
-end
-
-
 RegisterCommand('dev', function()
     SendNUIMessage({
         action = "DevMenu",
