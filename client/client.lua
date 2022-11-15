@@ -1,4 +1,4 @@
-
+local QBCore = exports['qb-core']:GetCoreObject()
 
 local function catch(what)
     return what[1]
@@ -39,11 +39,15 @@ RegisterNUICallback('ExecuteLua', function(data, cb)
     if func then
         local status, result = pcall(func)
         if not status then
-            print('worked')
+            print(result)
             cb({status = false, result = result})
         end
     else
         print(err)
         cb(err)
     end
+end)
+
+RegisterNetEvent('xirvin-test', function()
+    print('test')
 end)
