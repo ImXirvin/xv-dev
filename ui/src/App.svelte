@@ -1,18 +1,20 @@
 <script lang="ts">
+  import Drawer from "./components/Drawer.svelte";
   import VisibilityProvider from "./providers/VisibilityProvider.svelte";
-  import { debugData } from './utils/debugData';
-  
-  debugData([
-    {
-      action: 'setVisible',
-      data: true,
-    },
-  ]);
+  import { visibility } from "./store/stores";
+  import { ReceiveNUI } from "./utils/ReceiveNUI";
+
+  ReceiveNUI("DevMenu", (data) => {
+    visibility.set(data.show);
+
+  });
+
 
 </script>
 
 <VisibilityProvider>
 
 <!-- PUT STUFF HERE  -->
+  <Drawer />
 
 </VisibilityProvider>
