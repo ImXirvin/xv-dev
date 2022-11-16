@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { fly } from "svelte/transition";
     import LuaExec from "./LuaExec.svelte";
+
+    let showSide: boolean = false;
 
     let options =  [
         {
@@ -13,33 +16,42 @@
 </script>
 
 
-<div class="main-container absolute w-[45rem] h-[90%] bottom-0 right-0 bg-black  flex flex-col">
+<div transition:fly="{{x: 800, duration: 500,}}" class="main-container absolute w-[50rem] h-[98vh] my-auto right-0 flex flex-col overflow-x-hidden">
     <span class="relative h-[5rem] flex flex-row p-1 mb-3 items-center top-3">
-        <span class="relative text-white  text-[2.5rem] grid place-content-center sidebar-button fas fa-list z-10"></span>
-        <h1 class="text-white text-3xl font-bold absolute text-center w-full z-0">Xirvin's Dev Menu</h1>
+        <span class="relative text-white  text-[2.5rem] grid place-content-center sidebar-button fas fa-list z-10" on:click={() => showSide = !showSide}></span>
+        <h1 class="text-white text-3xl font-bold absolute text-center w-full z-0">{selected.name}</h1>
     </span>
-    <div class="h-full  relative flex flex-row">
-        <!-- LIST  -->
-        <ol class="w-[25%] h-full self-end relative text-center gap-5 flex flex-col">
-            {#each options as option, i}
-            <li class="list-item text-white text-2xl font-bold py-5" on:click={() => selected = options[i]}>{option.name}</li>
-            {/each}
-        </ol>
 
         <!-- CONTENT  -->
-        <svelte:component this={selected.component}/>
-
-    </div>
+        <svelte:component  this={selected.component}/>
+    <ol  class="w-[15rem] sidebar h-full self-end absolute text-center gap-5 flex flex-col p-5 {showSide ? 'show-side' : 'hide-side'} ">
+        {#each options as option, i}
+        <li class="list-item text-white text-2xl font-bold py-5 top-20" on:click={() => selected = options[i]}>{option.name}</li>
+        {/each}
+    </ol>
 
 
 </div>
 
 
 <style>
-
+    
     :root {
-        --color-primary: rgba(0, 0, 0, 0.8);
-        --color-secondary: rgba(0, 0, 0, 0.8);
+        --color-primary: rgba(0, 0, 0, 0.9);
+        --color-secondary: rgb(255, 0, 0, 0.8);
+    }
+
+    .show-side {
+        left: 0;
+    }
+
+    .hide-side {
+        left: -100%;
+    }
+
+    .sidebar {
+        background-color: var(--color-primary);
+        transition: left 0.2s;
     }
 
     .sidebar-button {
@@ -49,18 +61,24 @@
         /* top: 1rem;
         left: 1rem; */
         margin: 1rem;
-        padding: 1rem
+        padding: 1rem;
     }
 
     .sidebar-button:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: var(--color-primary);
+        box-shadow: 0 0 0.5rem 0.2rem var(--color-secondary);
     }
 
 
     .main-container {
         box-shadow: 0 0 0.5rem 0.2rem rgba(0, 0, 0, 0.5);
         background-color: var(--color-primary);
-        border-radius: 1rem;
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+        /* center vertically */
+        top: 50%;
+        transform: translateY(-50%);
+
     }
 
 
@@ -68,7 +86,10 @@
         position: relative;
         cursor: pointer;
         background-color: var(--color-secondary);
-        border-top-right-radius: 1rem;
-        border-bottom-right-radius: 1rem;
+        border-radius: 1rem;
+    }
+
+    .list-item:hover {
+        filter: drop-shadow(0 0 0.5rem var(--color-tertiary));
     }
 </style>
