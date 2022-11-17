@@ -1,5 +1,5 @@
-local QBCore = nil
-local ESX = nil
+QBCore = nil
+ESX = nil
 
 CreateThread(function()
     --get resource state of qb-core
