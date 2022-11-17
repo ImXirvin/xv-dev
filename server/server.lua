@@ -5,7 +5,6 @@ CreateThread(function()
     --get resource state of qb-core
     if GetResourceState('qb-core') == 'started' then
         QBCore = exports['qb-core']:GetCoreObject()
-        print('QBCore is loaded')
     end
     --get resource state of esx
     if GetResourceState('es_extended') == 'started' then
