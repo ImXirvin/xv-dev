@@ -1,3 +1,18 @@
+local QBCore = nil
+local ESX = nil
+
+CreateThread(function()
+    --get resource state of qb-core
+    if GetResourceState('qb-core') == 'started' then
+        QBCore = exports['qb-core']:GetCoreObject()
+    end
+    --get resource state of esx
+    if GetResourceState('es_extended') == 'started' then
+        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+    end
+end)
+
+
 RegisterCommand('dev', function()
     SendNUIMessage({
         action = "DevMenu",
