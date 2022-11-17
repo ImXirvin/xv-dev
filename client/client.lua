@@ -13,7 +13,13 @@ CreateThread(function()
 end)
 
 
+
 RegisterCommand('dev', function()
+    TriggerServerEvent('xv-dev:server:verifyExec')
+end, false)
+
+
+RegisterNetEvent('openDevMenu', function()
     SendNUIMessage({
         action = "DevMenu",
         data = {
@@ -21,8 +27,7 @@ RegisterCommand('dev', function()
         }
     })
     SetNuiFocus(true, true)
-end, true)
-
+end)
 
 RegisterNUICallback('hideUI', function(data, cb)
     SendNUIMessage({
@@ -35,7 +40,6 @@ RegisterNUICallback('hideUI', function(data, cb)
 end)
 
 RegisterNetEvent('xv-dev:client:UpdateOutput', function(output)
-    -- print(output)
     SendNUIMessage({
         action = "updateOutput",
         data = {
@@ -44,24 +48,24 @@ RegisterNetEvent('xv-dev:client:UpdateOutput', function(output)
     })
 end)
 
+RegisterNetEvent('xv-dev:client:ExecLua', function(code)
+    local func, err = load(code)
+    if func then
+        local status, result = pcall(func)
+        if status then
+            output = "Executed"
+        else
+            output = "Error: " .. (result or "Unknown")
+        end
+    else
+        output = "Error: " .. err
+    end
+    TriggerEvent('xv-dev:client:UpdateOutput', output)
+end)
+
 RegisterNUICallback('ExecuteLua', function(data, cb)
     local code = data.code
     local eventType = data.eventType
-    if eventType == 'client' then
-        local func, err = load(code)
-        if func then
-            local status, result = pcall(func)
-            if status then
-                output = "Executed"
-            else
-                output = "Error: " .. (result or "Unknown")
-            end
-        else
-            output = "Error: " .. err
-        end
-        TriggerEvent('xv-dev:client:UpdateOutput', output)
-    elseif eventType == 'server' then
-        TriggerServerEvent('xv-dev:server:ExecLua', code)
-    end
+    TriggerServerEvent('xv-dev:server:verifyExec', code, eventType)
     cb(1)
 end)

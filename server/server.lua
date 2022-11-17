@@ -12,8 +12,29 @@ CreateThread(function()
     end
 end)
 
+RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType)
+    local src = source
+    --check ace perms for source
+    local allowed = IsPlayerAceAllowed(src, 'command.dev')
+    if not allowed then
+        DropPlayer(src, 'Unauthorized access to dev menu')
+        print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+        return
+    end
+    if code == nil then
+        TriggerClientEvent('openDevMenu', src)
+        return
+    end
+    if eventType == 'client' then
+        TriggerClientEvent('xv-dev:client:ExecLua', src, code)
+    elseif eventType == 'server' then
+        TriggerEvent('xv-dev:server:ExecLua', src, code)
+    end
+end)
 
-RegisterNetEvent('xv-dev:server:ExecLua', function(code)
+
+
+RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
     local src = source
     local func, err = load(code)
     if func then
