@@ -21,7 +21,7 @@ RegisterNetEvent('xv-dev:server:ExecLua', function(code)
         if status then
             output = "Executed"
         else
-            output = "Error: " .. result
+            output = "Error: " .. (result or "Unknown")
         end
     else
         output = "Error: " .. err
