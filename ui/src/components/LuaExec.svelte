@@ -2,19 +2,31 @@
     import { SendNUI } from "../utils/sendNui";
     import { visibility } from "../store/stores";
     import { tooltip } from "../utils/tooltip";
+    import { afterUpdate } from 'svelte';
+  import { ReceiveNUI } from "../utils/ReceiveNUI";
 
     let luaCode;
     let selectedType: string;
-    let luaOutput: string;
+    let luaOutput: string = "";
+    let luaOutputElement: HTMLTextAreaElement;
 
 
     let hideOnExec: boolean = false;
     let wordWrap: boolean = true;
 
+    function getDateTime() {
+        let date = new Date();
+        let hour = date.getHours();
+        let min = date.getMinutes();
+        let sec = date.getSeconds();
+        let time = hour + ":" + min + ":" + sec;
+        return time;
+    }
+
     function execLua() {
-        SendNUI("execLua", {code: luaCode, eventType: selectedType, }; Promise<T>());
+        SendNUI("ExecuteLua", {code: luaCode, eventType: selectedType, });
         if (hideOnExec) {
-            visibility.set(false);
+            SendNUI("hideUI");
         }
     }
 
@@ -27,6 +39,25 @@
             e.target.selectionStart = e.target.selectionEnd = start + 1;
         }
     }
+    
+    function updateOutput(output) {
+        luaOutput += `[${getDateTime()}][${selectedType}]: ${output}\n`;
+        scrollToBottom(luaOutputElement);
+    }
+    
+    ReceiveNUI("updateOutput", (data) => {
+        updateOutput(data.output);
+    });
+
+
+    afterUpdate(() => {
+		if(luaOutputElement) scrollToBottom(luaOutputElement);
+    });
+
+    const scrollToBottom = async (node) => {
+    node.scroll({ top: (node.scrollHeight), behavior: 'auto' });
+  }; 
+
 </script>
 
 <div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col">
@@ -51,7 +82,7 @@
 
     <div class="w-[95%] h-[33.5rem] rounded-[1rem] mx-5 my-5 gap-5 align-bottom">
         <p class="text mb-3 text-start">Output</p>
-        <textarea readonly bind:value={luaOutput} class="w-full h-full p-5 overflow-y-scroll scrollbar-hide " placeholder="Output will be here"></textarea>
+        <textarea bind:this={luaOutputElement} readonly bind:value={luaOutput} class="w-full h-full p-5 overflow-y-scroll scrollbar-hide " placeholder="Output will be here"></textarea>
     </div>
 </div>
 

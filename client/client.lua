@@ -1,15 +1,13 @@
-local isOpen = false
-
-RegisterCommand('xv-dev:toggleMenu', function()
-    isOpen = not isOpen
+RegisterCommand('dev', function()
     SendNUIMessage({
         action = "DevMenu",
         data = {
-            show = isOpen,
+            show = true,
         }
     })
-    SetNuiFocus(isOpen, isOpen)
-end, 'admin')
+    SetNuiFocus(true, true)
+end, true)
+
 
 RegisterNUICallback('hideUI', function(data, cb)
     SendNUIMessage({
@@ -21,6 +19,16 @@ RegisterNUICallback('hideUI', function(data, cb)
     SetNuiFocus(false, false)
 end)
 
+RegisterNetEvent('xv-dev:client:UpdateOutput', function(output)
+    -- print(output)
+    SendNUIMessage({
+        action = "updateOutput",
+        data = {
+            output = output,
+        }
+    })
+end)
+
 RegisterNUICallback('ExecuteLua', function(data, cb)
     local code = data.code
     local eventType = data.eventType
@@ -28,18 +36,17 @@ RegisterNUICallback('ExecuteLua', function(data, cb)
         local func, err = load(code)
         if func then
             local status, result = pcall(func)
-            if not status then
-                print(result)
+            if status then
+                output = "Executed"
+            else
+                output = "Error: " .. result
             end
         else
-            print(err)
+            output = "Error: " .. err
         end
+        TriggerEvent('xv-dev:client:UpdateOutput', output)
     elseif eventType == 'server' then
-        --Create a callback for the server event
+        TriggerServerEvent('xv-dev:server:ExecLua', code)
     end
-end)
-
-
-RegisterNetEvent('xirvin-test', function()
-    print('test')
+    cb(1)
 end)

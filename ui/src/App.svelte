@@ -8,7 +8,6 @@
   ReceiveNUI("DevMenu", (data) => {
     visibility.set(data.show);
   });
-  visibility.set(true);
 </script>
 
 <VisibilityProvider>
