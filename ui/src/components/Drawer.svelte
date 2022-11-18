@@ -1,14 +1,19 @@
 <script lang="ts">
   import { fly } from "svelte/transition";
     import LuaExec from "./LuaExec.svelte";
+    import QuickFunc from "./QuickFunc.svelte"
 
     let showSide: boolean = false;
 
     let options =  [
         {
-            name: "LuaExec",
+            name: "Lua Executor",
             component: LuaExec,
         },
+        {
+            name: "Quick Functions",
+            component: QuickFunc,
+        }
     ];
     let selected = options[0]
 
