@@ -1,7 +1,29 @@
 <script lang="ts">
+  import type { variables, quickFuncs } from "src/@types";
+  import { tooltip } from "../utils/tooltip";
+
 
     let varCode: string = ""
-    let activeVars: string[] = ['', '', '', '', '', '', '', '', '', '']
+    let activeVars: variables[] = [
+        {
+            value: "",
+            global: false,
+        },
+    ]
+    
+    let quickFunc: Partial<quickFuncs>[] = [
+        {
+            code: "TriggerEvent",
+            name: "TriggerServerEvent",
+            params: [],
+        },
+        {
+            code: "TriggerClientEvent",
+            params: [],
+        },
+    ]
+
+    let selectedParam: number; // index of selected param
 
     function handleTab(e) {
         if (e.key === "Tab") {
@@ -13,26 +35,68 @@
         }
     }
 
+    function addVar() {
+        activeVars.push({
+            value: "",
+            global: false,
+        })
+        activeVars = [...activeVars]
+    }
+
     
 </script>
 
 
 
-<div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col">
-    <div class="w-[95%] h-[fit] rounded-[1rem] mx-5 flex flex-col gap-1">
-    {#each activeVars as varCon}
-        <textarea on:keydown={handleTab} bind:value={varCon} rows="1" class="w-full h-full leading-6 text-[1.5rem] p-5" placeholder="Create variables (local by default)"></textarea>
-    {/each}
+<div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col ">
+    <div class="w-[95%] h-[fit] relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
+        <div class="w-full max-h-[20rem] relative overflow-y-scroll  flex flex-col gap-1 ">
+            {#each activeVars as varCon, i}
+            <span class="flex flex-row gap-1 relative">
+                <div class:toggle-on={varCon.global} on:click={()=>{varCon.global=!varCon.global}} class="selection grid place-items-center w-auto h-auto "><i class="fa-solid fa-earth-americas"></i></div>
+                <textarea on:keydown={handleTab}   bind:value={varCon.value} rows="1" class="w-full h-full leading-6 text-[1.5rem] p-5" placeholder="Create variables ({varCon.global ? 'GLOBAL':'LOCAL'})"></textarea>
+                <div  on:click={()=>{if (activeVars.length > 1){activeVars.splice(i,1);activeVars = [...activeVars] }}} class="selection grid place-items-center w-auto h-auto fa-solid fa-trash"></div>
+            </span>
+            {/each}
+        </div>
+        <button class="add-button relative w-[fit]" on:click={addVar}><i class="fa-solid fa-plus"></i></button>
     </div>
+    <div class="w-[95%] h-[fit] relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
+        <span class="text my-5">FUNCTIONS</span>
+        <div class="w-full max-h-[20rem] relative overflow-y-visible  flex flex-col gap-1 ">
+            {#each quickFunc as func, i}
+            <span class="flex flex-row w-full gap-1 relative overflow-visible">
+                <p class=" code-text w-fit h-full leading-6 text-[1.5rem] p-5">{func.name || func.code}</p>
+                {#each func.params as param, v}
+                <span role="textbox" contenteditable="true" on:focusout={()=>selectedParam=null} on:dblclick={()=>{if (selectedParam==v){ selectedParam=null } else { selectedParam=v;}}} class:toggle-on={(selectedParam==v)} bind:innerHTML={param} rows="1" class="param-item max-w-fit w-52 h-full leading-6 text-[1.5rem] p-5" ></span>
+                {/each}
+                <div  on:click={()=>{func.params.push(""); func.params = [...func.params]}} class="selection grid place-items-center w-auto h-auto relative fa-solid relative fa-plus "></div>
+                
+                {#if func.params.length > 0}
+                <div   on:click={()=>{if (func.params.length > 0){func.params.splice(selectedParam,1);func.params = [...func.params] }}}  class="selection grid place-items-center w-auto h-auto fa-solid fa-trash" ></div>
+                {/if}
+
+            </span>
+            {/each}
+        </div>
+    </div>
+
+
+
 
 </div>
 
 
 <style>
 
+/* disable tab selection highlight for all element */
+    *:focus {
+        outline: none;
+    }
+    
     *::-webkit-scrollbar {
-        height: 8px;
         width: 8px;
+        height: 8px;
     }
 
     *::-webkit-scrollbar-track {
@@ -44,7 +108,14 @@
         border-radius: 10px;
     }
 
-    textarea {
+    .code-text {
+        background-color: var(--color-secondary);
+        color: var(--color-tertiary);
+        font-family: monospace, monospace;
+        letter-spacing: 1px;
+    }
+
+    textarea, .param-item {
         resize: none;
         background-color: var(--color-secondary);
         color: var(--color-tertiary);
@@ -56,6 +127,48 @@
         overflow-x: auto;
     }
 
+    .text {
+        color: var(--color-tertiary);
+        font-weight: bold;
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+    }
 
 
+
+    .selection {
+        aspect-ratio : 1 / 1;
+        /* background-color: var(--color-secondary); */
+        color: var(--color-tertiary);
+        font-weight: bold;
+        font-size: 1.5rem;
+        /* border: 1px solid var(--color-tertiary); */
+        border-radius: 0.5rem;
+        letter-spacing: 1px;
+        background-color: var(--color-secondary);
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+    .add-button {
+        /* background-color: var(--color-secondary); */
+        color: var(--color-tertiary);
+        font-weight: bold;
+        font-size: 1.5rem;
+        /* border: 1px solid var(--color-tertiary); */
+        border-radius: 0.5rem;
+        letter-spacing: 1px;
+        background-color: var(--color-secondary);
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+
+    .selection:hover ,.add-button:hover {
+        color: var(--color-tertiary);
+        filter: drop-shadow(0 0 0.5rem var(--color-tertiary));
+    }
+
+
+    .toggle-on {
+        border: 2px solid var(--color-tertiary);
+    }
 </style>

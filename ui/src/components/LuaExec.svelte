@@ -90,18 +90,9 @@
 <style>
 
     *::-webkit-scrollbar {
-        height: 8px;
-        width: 8px;
+        display: none;
     }
 
-    *::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0);
-    }
-
-    *::-webkit-scrollbar-thumb {
-        background-color: var(--color-tertiary);
-        border-radius: 10px;
-    }
 
     textarea {
         resize: none;
