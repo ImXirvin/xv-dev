@@ -2,8 +2,8 @@
     import { SendNUI } from "../utils/sendNui";
     import { visibility } from "../store/stores";
     import { tooltip } from "../utils/tooltip";
-  import Output from "./Output.svelte";
-  import { execLuaRaw } from "../utils/luaHandler";
+    import Console from "./Console.svelte";
+    import { execLuaRaw } from "../utils/luaHandler";
 
 
     let luaCode;
@@ -62,7 +62,7 @@
         <i on:click={()=>{wordWrap=!wordWrap}} class:toggle-on={wordWrap} class="selection grid place-items-center w-auto h-auto toggle-on "><i use:tooltip title="Toggle Word-Wrap" class="bi bi-text-wrap text-[2rem]"></i></i>
     </span>
 
-    <Output/>
+    <Console/>
 </div>
 
 
@@ -92,9 +92,6 @@
         outline: none;
     }
 
-    .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
 
     .selection {
         /* background-color: var(--color-secondary); */

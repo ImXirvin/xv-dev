@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { variables, quickFuncs } from "src/@types";
-  import Output from "./Output.svelte";
+  import Console from "./Console.svelte";
   import { execQuickFunc } from "../utils/luaHandler";
 
 
@@ -50,8 +50,8 @@
 
 
 <div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col overflow-y-scroll ">
-    <div class="w-[95%] h-[fit] relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
-        <div class="w-full max-h-[20rem] relative overflow-y-scroll  flex flex-col gap-1 ">
+    <div class="w-[95%] h-[fit] variables-container relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
+        <div class="w-full max-h-[20rem] variables-container relative overflow-y-scroll  flex flex-col gap-1 ">
             {#each activeVars as varCon, i}
             <span class="flex flex-row gap-1 relative">
                 <div class:toggle-on={varCon.global} on:click={()=>{varCon.global=!varCon.global}} class="selection grid place-items-center w-auto h-auto "><i class="fa-solid fa-earth-americas"></i></div>
@@ -67,7 +67,7 @@
         <div class="w-full max-h-[20rem] relative overflow-y-visible  flex flex-col gap-1 ">
             {#each quickFunc as func, i}
             <div class="flex flex-wrap w-full gap-1 h-fit relative overflow-visible  ">
-                <button on:click={()=>execQuickFunc(func)} class="button exec-button grid place-items-center">
+                <button on:click={()=>execQuickFunc(func, activeVars)} class="button exec-button grid place-items-center">
                     <span class="fas fa-play p-3 w-auto h-auto" ></span>
                 </button>
                 <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5">{func.name || func.code}</p>
@@ -84,7 +84,7 @@
         </div>
     </div>
 
-    <Output />
+    <Console />
 
 
 
@@ -99,9 +99,10 @@
     }
     
     *::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 0px;
+        height: 0px;
     }
+
 
     *::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0);
