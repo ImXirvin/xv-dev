@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { SendNUI } from "../utils/sendNui";
-    import { visibility } from "../store/stores";
+    import { SendNUI } from "../utils/SendNui";
     import { tooltip } from "../utils/tooltip";
     import Console from "./Console.svelte";
     import { execLuaRaw } from "../utils/luaHandler";

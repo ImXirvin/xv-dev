@@ -1,6 +1,5 @@
 import { SendNUI } from "./sendNui";
 import { luaOutput, debug, execHistory, activeGlobalVariables } from "../store/stores";
-import { onMount, onDestroy } from "svelte";
 
 let isDebug = false;
 debug.subscribe((n) => (isDebug = n));
