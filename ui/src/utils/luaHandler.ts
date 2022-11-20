@@ -1,11 +1,11 @@
 import { SendNUI } from "./sendNui";
-import { ReceiveNUI } from "./ReceiveNUI";
-import { luaOutput } from "../store/stores";
+import { luaOutput, debug } from "../store/stores";
+import { onMount, onDestroy } from "svelte";
+
+let isDebug = false;
+debug.subscribe((n) => (isDebug = n));
 
 
-ReceiveNUI("updateOutput", (data) => {
-    updateOutput(data.output, data.eventType);
-});
 
 function getDateTime() {
     let date = new Date();
@@ -22,6 +22,11 @@ function updateOutput(output, eventType) {
 }
 
 export function execLuaRaw(code: string, eventType: string) {
+    let debugString = `Raw Lua: ${code}`;
+    if (isDebug) {
+        updateOutput(debugString, 'DEBUG');
+    }
+
     SendNUI("ExecuteLua", {code: code, eventType: eventType, });
 }
 
@@ -45,3 +50,10 @@ export function execQuickFunc(funcObject: any) {
     execLuaRaw(code, eventType);
 }
 
+window.addEventListener("message", (event) => {
+    const item = event.data;
+
+    if (item.action === "updateOutput") {
+        updateOutput(item.data.output, item.data.eventType);
+    }
+});

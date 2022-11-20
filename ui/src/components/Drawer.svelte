@@ -2,6 +2,7 @@
   import { fly } from "svelte/transition";
     import LuaExec from "./LuaExec.svelte";
     import QuickFunc from "./QuickFunc.svelte"
+    import { debug } from "../store/stores";
 
     let showSide: boolean = false;
 
@@ -25,6 +26,7 @@
     <span class="relative h-[5rem] flex flex-row p-1 mb-3 items-center top-3">
         <span class="relative text-white  text-[2.5rem] grid place-content-center sidebar-button fas fa-list z-10" on:click={() => showSide = !showSide}></span>
         <h1 class="text-white text-3xl font-bold absolute text-center w-full z-0">{selected.name}</h1>
+        <button class="selection grid place-items-center w-auto h-auto absolute mx-5 right-0" class:toggle-on={$debug} on:click={() => $debug = !$debug}><i class="fa-solid fa-bug p-3 w-auto h-auto"></i></button>
     </span>
 
         <!-- CONTENT  -->
@@ -48,6 +50,10 @@
 
     .show-side {
         left: 0;
+    }
+
+    .toggle-on {
+        border: 2px solid var(--color-tertiary);
     }
 
     .hide-side {
@@ -96,5 +102,17 @@
 
     .list-item:hover {
         filter: drop-shadow(0 0 0.5rem var(--color-tertiary));
+    }
+
+    .selection {
+        aspect-ratio : 1 / 1;
+        color: var(--color-tertiary);
+        font-weight: bold;
+        font-size: 1.5rem;
+        border-radius: 0.5rem;
+        letter-spacing: 1px;
+        background-color: var(--color-secondary);
+        padding: 0.5rem;
+        cursor: pointer;
     }
 </style>

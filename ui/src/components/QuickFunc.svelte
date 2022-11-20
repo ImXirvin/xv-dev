@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { variables, quickFuncs } from "src/@types";
   import Output from "./Output.svelte";
+  import { execQuickFunc } from "../utils/luaHandler";
 
 
     let activeVars: variables[] = [
@@ -43,6 +44,7 @@
         activeVars = [...activeVars]
     }
 
+
 </script>
 
 
@@ -65,6 +67,9 @@
         <div class="w-full max-h-[20rem] relative overflow-y-visible  flex flex-col gap-1 ">
             {#each quickFunc as func, i}
             <div class="flex flex-wrap w-full gap-1 h-fit relative overflow-visible  ">
+                <button on:click={()=>execQuickFunc(func)} class="button exec-button grid place-items-center">
+                    <span class="fas fa-play p-3 w-auto h-auto" ></span>
+                </button>
                 <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5">{func.name || func.code}</p>
                 {#each func.params as param, v}
                     <span role="textbox" contenteditable="true" on:focusout={()=>selectedParam=null} on:dblclick={()=>{if (selectedParam==v){ selectedParam=null } else { selectedParam=v;}}} class:toggle-on={(selectedParam==v)} bind:innerHTML={param} rows="1" class="param-item relative max-w-fit  h-fit leading-6 text-[1.5rem] p-5" ></span>
@@ -74,7 +79,6 @@
                 {#if func.params.length > 0}
                 <div   on:click={()=>{if (func.params.length > 0){func.params.splice(selectedParam,1);func.params = [...func.params] }}}  class="button grid place-items-center" ><i class="fa-solid fa-trash p-3 w-auto h-auto"></i></div>
                 {/if}
-
             </div>
             {/each}
         </div>
@@ -142,6 +146,16 @@
         background-color: var(--color-secondary);
         cursor: pointer;
     }
+
+    .exec-button:active {
+        background-color: var(--color-tertiary);
+        color: var(--color-primary);
+    }
+    .exec-button:active > span {
+        background-color: var(--color-tertiary);
+        color: var(--color-primary);
+    }
+
 
     .text {
         color: var(--color-tertiary);

@@ -11,14 +11,19 @@
     });
 
 
-    luaOutput.subscribe((value) => {
-        luaOutputElement.value = value;
-        scrollToBottom(luaOutputElement);
-    });
-
     const scrollToBottom = async (node) => {
     node.scroll({ top: (node.scrollHeight), behavior: 'auto' });
   }; 
+
+    luaOutput.subscribe((value) => {
+        if (luaOutputElement) {
+            luaOutputElement.value = value;
+            scrollToBottom(luaOutputElement);
+        }
+
+    });
+
+
 
 </script>
 
