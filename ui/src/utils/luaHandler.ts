@@ -1,4 +1,4 @@
-import { SendNUI } from "./sendNui";
+import { SendNUI } from "./SendNui";
 import { luaOutput, debug, execHistory, activeGlobalVariables } from "../store/stores";
 
 let isDebug = false;
