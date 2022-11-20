@@ -36,8 +36,8 @@ export function execQuickFunc(funcObject: any, variables: any) {
         for (let i = 0; i < variables.length; i++) {
             let scope = variables[i].global ? `_G` : `local`;
             code += `${scope} ${variables[i].value}\n`
-
         }
+        updateVariables(variables);
     }
 
     code = code + funcObject.code;
@@ -83,3 +83,15 @@ function updateExecHistory(code: string, eventType: string) {
     });
 }
 
+function updateVariables(variables: any) {
+    activeGlobalVariables.update((n) => {
+        for (let i = 0; i < variables.length; i++) {
+            if (variables[i].global) {
+                if (!n.includes(variables[i].value)) {
+                    n.push(variables[i].value);
+                }
+            }
+        }
+        return n;
+    });
+}
