@@ -30,9 +30,17 @@ export function execLuaRaw(code: string, eventType: string) {
     SendNUI("ExecuteLua", {code: code, eventType: eventType, });
 }
 
-export function execQuickFunc(funcObject: any) {
+export function execQuickFunc(funcObject: any, variables: any) {
     let code = ``
-    code = funcObject.code;
+    if (variables.length > 0) {
+        for (let i = 0; i < variables.length; i++) {
+            let scope = variables[i].global ? `_G` : `local`;
+            code += `${scope} ${variables[i].value}\n`
+
+        }
+    }
+
+    code = code + funcObject.code;
     if (funcObject.params.length > 0) {
         code = code + `(`;
         for (let i = 0; i < funcObject.params.length; i++) {
@@ -74,3 +82,4 @@ function updateExecHistory(code: string, eventType: string) {
         return n;
     });
 }
+
