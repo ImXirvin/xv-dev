@@ -2,29 +2,21 @@
     import { SendNUI } from "../utils/sendNui";
     import { visibility } from "../store/stores";
     import { tooltip } from "../utils/tooltip";
-    import { afterUpdate } from 'svelte';
-  import { ReceiveNUI } from "../utils/ReceiveNUI";
+  import Output from "./Output.svelte";
+  import { execLuaRaw } from "../utils/luaHandler";
+
 
     let luaCode;
-    let selectedType: string;
-    let luaOutput: string = "";
-    let luaOutputElement: HTMLTextAreaElement;
-
+    let eventType: string;
 
     let hideOnExec: boolean = false;
     let wordWrap: boolean = true;
 
-    function getDateTime() {
-        let date = new Date();
-        let hour = date.getHours();
-        let min = date.getMinutes();
-        let sec = date.getSeconds();
-        let time = hour + ":" + min + ":" + sec;
-        return time;
-    }
+
 
     function execLua() {
-        SendNUI("ExecuteLua", {code: luaCode, eventType: selectedType, });
+        // SendNUI("ExecuteLua", {code: luaCode, eventType: eventType, });
+        execLuaRaw(luaCode, eventType);
         if (hideOnExec) {
             SendNUI("hideUI");
         }
@@ -40,29 +32,19 @@
         }
     }
     
-    function updateOutput(output) {
-        luaOutput += `[${getDateTime()}][${selectedType}]: ${output}\n`;
-        scrollToBottom(luaOutputElement);
-    }
+
     
-    ReceiveNUI("updateOutput", (data) => {
-        updateOutput(data.output);
-    });
 
 
-    afterUpdate(() => {
-		if(luaOutputElement) scrollToBottom(luaOutputElement);
-    });
 
-    const scrollToBottom = async (node) => {
-    node.scroll({ top: (node.scrollHeight), behavior: 'auto' });
-  }; 
+
+
 
 </script>
 
-<div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col">
+<div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col overflow-y-scroll">
 
-    <div class="w-[95%] h-1/2 rounded-[1rem] mx-5">
+    <div class="w-[95%] h-full rounded-[1rem] mx-5">
         <textarea on:keydown={handleTab} bind:value={luaCode} class="w-full h-full p-5 word-wrap" class:not-word-wrap={!wordWrap} placeholder="Enter Lua code here"></textarea>
     </div>
 
@@ -71,7 +53,7 @@
             EXECUTE
             <span class="fas fa-play use-selection text-[2rem]" ></span>
         </button>
-        <select bind:value={selectedType} class="selection">
+        <select bind:value={eventType} class="selection">
             <option value="client">Client</option>
             <option value="server">Server</option>
         </select>
@@ -80,10 +62,7 @@
         <i on:click={()=>{wordWrap=!wordWrap}} class:toggle-on={wordWrap} class="selection grid place-items-center w-auto h-auto toggle-on "><i use:tooltip title="Toggle Word-Wrap" class="bi bi-text-wrap text-[2rem]"></i></i>
     </span>
 
-    <div class="w-[95%] h-[33.5rem] rounded-[1rem] mx-5 my-5 gap-5 align-bottom">
-        <p class="text mb-3 text-start">Output</p>
-        <textarea bind:this={luaOutputElement} readonly bind:value={luaOutput} class="w-full h-full p-5 overflow-y-scroll scrollbar-hide " placeholder="Output will be here"></textarea>
-    </div>
+    <Output/>
 </div>
 
 

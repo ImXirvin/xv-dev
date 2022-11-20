@@ -1,9 +1,8 @@
 <script lang="ts">
   import type { variables, quickFuncs } from "src/@types";
-  import { tooltip } from "../utils/tooltip";
+  import Output from "./Output.svelte";
 
 
-    let varCode: string = ""
     let activeVars: variables[] = [
         {
             value: "",
@@ -15,6 +14,7 @@
         {
             code: "TriggerEvent",
             name: "TriggerServerEvent",
+            server: true,
             params: [],
         },
         {
@@ -43,12 +43,11 @@
         activeVars = [...activeVars]
     }
 
-    
 </script>
 
 
 
-<div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col ">
+<div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col overflow-y-scroll ">
     <div class="w-[95%] h-[fit] relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
         <div class="w-full max-h-[20rem] relative overflow-y-scroll  flex flex-col gap-1 ">
             {#each activeVars as varCon, i}
@@ -65,22 +64,23 @@
         <span class="text my-5">FUNCTIONS</span>
         <div class="w-full max-h-[20rem] relative overflow-y-visible  flex flex-col gap-1 ">
             {#each quickFunc as func, i}
-            <span class="flex flex-row w-full gap-1 relative overflow-visible">
-                <p class=" code-text w-fit h-full leading-6 text-[1.5rem] p-5">{func.name || func.code}</p>
+            <div class="flex flex-wrap w-full gap-1 h-fit relative overflow-visible  ">
+                <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5">{func.name || func.code}</p>
                 {#each func.params as param, v}
-                <span role="textbox" contenteditable="true" on:focusout={()=>selectedParam=null} on:dblclick={()=>{if (selectedParam==v){ selectedParam=null } else { selectedParam=v;}}} class:toggle-on={(selectedParam==v)} bind:innerHTML={param} rows="1" class="param-item max-w-fit w-52 h-full leading-6 text-[1.5rem] p-5" ></span>
+                    <span role="textbox" contenteditable="true" on:focusout={()=>selectedParam=null} on:dblclick={()=>{if (selectedParam==v){ selectedParam=null } else { selectedParam=v;}}} class:toggle-on={(selectedParam==v)} bind:innerHTML={param} rows="1" class="param-item relative max-w-fit  h-fit leading-6 text-[1.5rem] p-5" ></span>
                 {/each}
-                <div  on:click={()=>{func.params.push(""); func.params = [...func.params]}} class="selection grid place-items-center w-auto h-auto relative fa-solid relative fa-plus "></div>
+                <div  on:click={()=>{func.params.push(""); func.params = [...func.params]}} class="button grid place-items-center"><i class="fa-solid fa-plus p-3 w-auto h-auto"></i></div>
                 
                 {#if func.params.length > 0}
-                <div   on:click={()=>{if (func.params.length > 0){func.params.splice(selectedParam,1);func.params = [...func.params] }}}  class="selection grid place-items-center w-auto h-auto fa-solid fa-trash" ></div>
+                <div   on:click={()=>{if (func.params.length > 0){func.params.splice(selectedParam,1);func.params = [...func.params] }}}  class="button grid place-items-center" ><i class="fa-solid fa-trash p-3 w-auto h-auto"></i></div>
                 {/if}
 
-            </span>
+            </div>
             {/each}
         </div>
     </div>
 
+    <Output />
 
 
 
@@ -108,6 +108,10 @@
         border-radius: 10px;
     }
 
+    .param-item::-webkit-scrollbar {
+        height: 2px;
+    }
+
     .code-text {
         background-color: var(--color-secondary);
         color: var(--color-tertiary);
@@ -127,6 +131,18 @@
         overflow-x: auto;
     }
 
+    .button {
+        aspect-ratio : 1 / 1;
+        color: var(--color-tertiary);
+        font-weight: bold;
+        font-size: 1.5rem;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        letter-spacing: 1px;
+        background-color: var(--color-secondary);
+        cursor: pointer;
+    }
+
     .text {
         color: var(--color-tertiary);
         font-weight: bold;
@@ -138,11 +154,9 @@
 
     .selection {
         aspect-ratio : 1 / 1;
-        /* background-color: var(--color-secondary); */
         color: var(--color-tertiary);
         font-weight: bold;
         font-size: 1.5rem;
-        /* border: 1px solid var(--color-tertiary); */
         border-radius: 0.5rem;
         letter-spacing: 1px;
         background-color: var(--color-secondary);
@@ -150,11 +164,9 @@
         cursor: pointer;
     }
     .add-button {
-        /* background-color: var(--color-secondary); */
         color: var(--color-tertiary);
         font-weight: bold;
         font-size: 1.5rem;
-        /* border: 1px solid var(--color-tertiary); */
         border-radius: 0.5rem;
         letter-spacing: 1px;
         background-color: var(--color-secondary);
@@ -162,7 +174,7 @@
         cursor: pointer;
     }
 
-    .selection:hover ,.add-button:hover {
+    .selection:hover ,.add-button:hover, .button:hover {
         color: var(--color-tertiary);
         filter: drop-shadow(0 0 0.5rem var(--color-tertiary));
     }

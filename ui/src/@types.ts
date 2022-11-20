@@ -6,5 +6,6 @@ export interface variables {
 export interface quickFuncs {
     code: string;
     name: string;
+    server: boolean;
     params: string[];
 }

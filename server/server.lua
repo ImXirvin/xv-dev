@@ -47,5 +47,5 @@ RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
     else
         output = "Error: " .. err
     end
-    TriggerClientEvent('xv-dev:client:UpdateOutput', src, output)
+    TriggerClientEvent('xv-dev:client:UpdateOutput', src, output, 'server')
 end)
