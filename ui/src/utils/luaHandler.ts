@@ -1,5 +1,5 @@
 import { SendNUI } from "./sendNui";
-import { luaOutput, debug } from "../store/stores";
+import { luaOutput, debug, execHistory, activeGlobalVariables } from "../store/stores";
 import { onMount, onDestroy } from "svelte";
 
 let isDebug = false;
@@ -26,7 +26,7 @@ export function execLuaRaw(code: string, eventType: string) {
     if (isDebug) {
         updateOutput(debugString, 'DEBUG');
     }
-
+    updateExecHistory(code, eventType);
     SendNUI("ExecuteLua", {code: code, eventType: eventType, });
 }
 
@@ -47,6 +47,7 @@ export function execQuickFunc(funcObject: any) {
     if (funcObject.server) {
         eventType = `server`;
     }
+    
     execLuaRaw(code, eventType);
 }
 
@@ -57,3 +58,19 @@ window.addEventListener("message", (event) => {
         updateOutput(item.data.output, item.data.eventType);
     }
 });
+
+
+function updateExecHistory(code: string, eventType: string) {
+    let codeLine: string = `[${getDateTime()}][${eventType}]: ${code}`
+    execHistory.update((n) => {
+        if (n.includes(codeLine)) {
+            n.splice(n.indexOf(codeLine), 1);
+        }
+        n.unshift(codeLine);
+        if (n.length > 10) {
+            n.pop();
+        }
+        console.log(n)
+        return n;
+    });
+}

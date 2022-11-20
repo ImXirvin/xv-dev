@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 
 export const visibility = writable(false);
 
+sessionStorage.setItem("luaOutput", "");
 export const luaOutput = writable(`` || sessionStorage.getItem(`luaOutput`));
 
 luaOutput.subscribe((n) => sessionStorage.setItem(`luaOutput`, n));
