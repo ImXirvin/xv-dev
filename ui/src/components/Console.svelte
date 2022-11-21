@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { luaOutput } from "../store/stores";
-    import { afterUpdate } from 'svelte';
+    import { luaOutput, execHistory } from "../store/stores";
+    import { afterUpdate, onMount } from 'svelte';
 
     let luaOutputElement: HTMLTextAreaElement;
 
-
+    export let showHistory: boolean = false;
+    let currentContent: string = "";
 
     afterUpdate(() => {
 		if(luaOutputElement) scrollToBottom(luaOutputElement);
@@ -17,11 +18,34 @@
 
     luaOutput.subscribe((value) => {
         if (luaOutputElement) {
-            luaOutputElement.value = value;
+            if (!showHistory) {
+                currentContent = value;
+            }
             scrollToBottom(luaOutputElement);
         }
-
     });
+    
+    onMount(() => {
+        if (luaOutputElement) {
+            if (!showHistory) {
+                currentContent = $luaOutput;
+            } else {
+                currentContent = $execHistory;
+            }
+            scrollToBottom(luaOutputElement);
+        }
+    });
+
+    execHistory.subscribe((value) => {
+        if (luaOutputElement) {
+            if (showHistory) {
+                currentContent = value;
+            }
+            scrollToBottom(luaOutputElement);
+        }
+    });
+
+
 
 
 
@@ -29,7 +53,7 @@
 
 <div class="w-[95%] h-[30%] rounded-[1rem] relative mx-5 self-end self-baseline bottom-0">
     <p class="text mb-3 mt-5 text-start">Console</p>
-    <textarea bind:this={luaOutputElement} readonly bind:value={$luaOutput} class="w-full h-full p-5 overflow-y-scroll scrollbar-hide " placeholder="Output will be here"></textarea>
+    <textarea bind:this={luaOutputElement} readonly bind:value={currentContent} class="w-full h-full p-5 overflow-y-scroll scrollbar-hide " placeholder="Output will be here"></textarea>
 </div>
 
 

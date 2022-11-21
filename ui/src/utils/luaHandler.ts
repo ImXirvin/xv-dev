@@ -25,7 +25,7 @@ export function execLuaRaw(code: string, eventType: string) {
     if (isDebug) {
         updateOutput(debugString, 'DEBUG');
     }
-    updateExecHistory(code, eventType);
+    execHistory.update((n) => n + `[${getDateTime()}][${eventType}]: ${code}\n`);
     SendNUI("ExecuteLua", {code: code, eventType: eventType, });
 }
 
@@ -33,8 +33,10 @@ export function execQuickFunc(funcObject: any, variables: any) {
     let code = ``
     if (variables.length > 0) {
         for (let i = 0; i < variables.length; i++) {
-            let scope = variables[i].global ? `_G` : `local`;
-            code += `${scope} ${variables[i].value}\n`
+            if (variables[i].value.length > 0) {
+                let scope = variables[i].global ? `_G` : `local`;
+                code += `${scope} ${variables[i].value}\n`
+            }
         }
         updateVariables(variables);
     }
@@ -66,21 +68,6 @@ window.addEventListener("message", (event) => {
     }
 });
 
-
-function updateExecHistory(code: string, eventType: string) {
-    let codeLine: string = `[${getDateTime()}][${eventType}]: ${code}`
-    execHistory.update((n) => {
-        if (n.includes(codeLine)) {
-            n.splice(n.indexOf(codeLine), 1);
-        }
-        n.unshift(codeLine);
-        if (n.length > 10) {
-            n.pop();
-        }
-        console.log(n)
-        return n;
-    });
-}
 
 function updateVariables(variables: any) {
     activeGlobalVariables.update((n) => {

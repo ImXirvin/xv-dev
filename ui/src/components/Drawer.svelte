@@ -2,6 +2,7 @@
   import { fly } from "svelte/transition";
     import LuaExec from "./LuaExec.svelte";
     import QuickFunc from "./QuickFunc.svelte"
+    import History from "./History.svelte";
     import { debug } from "../store/stores";
 
     let showSide: boolean = false;
@@ -14,7 +15,11 @@
         {
             name: "Quick Functions",
             component: QuickFunc,
-        }
+        },
+        {
+            name: "History",
+            component: History,
+        },
     ];
     let selected = options[0]
 
