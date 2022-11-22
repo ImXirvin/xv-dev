@@ -12,11 +12,19 @@ CreateThread(function()
     end
 end)
 
-RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType)
+
+local function CheckPerms(source)
     local src = source
     local allowedServer = false
     local allowedClient = false
-    -- print(Config.StrictMode)
+    local allowed = IsPlayerAceAllowed(src, 'command.dev')
+
+    if not allowed then
+        DropPlayer(src, 'Unauthorized access to dev menu')
+        print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+        return
+    end
+
     if Config.StrictMode then
         local identifierTable = GetPlayerIdentifiers(src)
         for k, v in pairs(Config.Identifiers) do
@@ -40,13 +48,13 @@ RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType)
             end
         end
     end
-    --check ace perms for source
-    local allowed = IsPlayerAceAllowed(src, 'command.dev')
-    if not allowed then
-        DropPlayer(src, 'Unauthorized access to dev menu')
-        print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
-        return
-    end
+
+    return allowed, allowedClient, allowedServer
+end
+
+RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType)
+    local src = source
+    local allowed, allowedClient, allowedServer = CheckPerms(src)
     if code == nil then
         TriggerClientEvent('openDevMenu', src)
         return
@@ -72,6 +80,13 @@ end)
 
 RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
     local src = source
+    local allowed, allowedClient, allowedServer = CheckPerms(src)
+    if not allowedServer and Config.StrictMode then
+        TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
+        print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+        return
+    end
+    
     local func, err = load(code)
     if func then
         local status, result = pcall(func)
