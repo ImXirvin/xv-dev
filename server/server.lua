@@ -16,7 +16,7 @@ RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType)
     local src = source
     local allowedServer = false
     local allowedClient = false
-    print(Config.StrictMode)
+    -- print(Config.StrictMode)
     if Config.StrictMode then
         local identifierTable = GetPlayerIdentifiers(src)
         for k, v in pairs(Config.Identifiers) do
