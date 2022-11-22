@@ -9,7 +9,7 @@
     visibility.set(data.show);
   });
 
-  // visibility.set(true)
+  visibility.set(true)
 
 </script>
 

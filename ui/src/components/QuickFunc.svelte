@@ -113,6 +113,25 @@
     }
 
 
+    let searchTerm = "";
+    let searchResults: Partial<quickFuncs>[] = [];
+        
+    $: {
+        if (searchTerm.length > 0) {
+            searchResults = quickFunc.filter((func) => {
+                console.log(func)
+                if (func.name) {
+                    return func.name.toLowerCase().includes(searchTerm.toLowerCase())
+                }
+                return func.code.toLowerCase().includes(searchTerm.toLowerCase())
+            })
+            console.log(searchResults)
+        } else {
+            searchResults = quickFunc;
+        }
+    }
+
+
 </script>
 
 
@@ -130,18 +149,21 @@
         </div>
         <button class="add-button relative w-[fit]" on:click={addVar}><i class="fa-solid fa-plus"></i></button>
     </div>
-    <div class="w-[95%] h-[fit] relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
-        <span class="text my-5">FUNCTIONS</span>
-        <div class="w-full max-h-[20rem] relative overflow-y-visible  flex flex-col gap-1 ">
-            {#each quickFunc as func, i}
+    <div class="w-[95%]  relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
+        <span class="text mb-3 mt-5 text-start">FUNCTIONS
+            <input bind:value={searchTerm} class="search-input" placeholder="Search for a function" />
+        </span>
+        <div class="w-full max-h-[38rem] relative overflow-y-scroll flex flex-col gap-1 ">
+            {#each searchResults as func}
+            <!-- {#each quickFunc as func, i} -->
             <div class="flex flex-wrap w-full gap-1 h-fit relative overflow-visible  ">
                 <button on:click={()=>execQuickFunc(func, activeVars)} class="button exec-button grid place-items-center">
                     <span class="fas fa-play p-3 w-auto h-auto" ></span>
                 </button>
                 {#if func.expectedParams}
-                <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5" use:tooltip title={`(${func.expectedParams})`}>{func.name || func.code}</p>
+                <p class=" code-text w-fit h-fit relative leading-6 text-[1.5rem] p-5" use:tooltip title={`(${func.expectedParams})`}>{func.name || func.code}</p>
                 {:else}
-                <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5" >{func.name || func.code}</p>
+                <p class=" code-text w-fit h-fit relative leading-6 text-[1.5rem] p-5" >{func.name || func.code}</p>
                 {/if}
                 {#each func.params as param, v}
                     <span role="textbox" contenteditable="true" on:focusout={()=>selectedParam=null} on:dblclick={()=>{if (selectedParam==v){ selectedParam=null } else { selectedParam=v;}}} class:toggle-on={(selectedParam==v)} bind:innerHTML={param} rows="1" class="param-item relative max-w-fit  h-fit leading-6 text-[1.5rem] p-5" ></span>
@@ -196,7 +218,7 @@
         letter-spacing: 1px;
     }
 
-    textarea, .param-item {
+    textarea, .param-item, .search-input {
         resize: none;
         background-color: var(--color-secondary);
         color: var(--color-tertiary);
