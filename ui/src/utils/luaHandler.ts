@@ -30,6 +30,7 @@ export function execLuaRaw(code: string, eventType: string) {
 }
 
 export function execQuickFunc(funcObject: any, variables: any) {
+    if (funcObject.params.length == 0) updateOutput(`${funcObject.code} didn't have any parameters, therefore skipping.`, 'INFO');
     let code = ``
     if (variables.length > 0) {
         for (let i = 0; i < variables.length; i++) {
