@@ -36,7 +36,7 @@ export function execQuickFunc(funcObject: any, variables: any) {
         for (let i = 0; i < variables.length; i++) {
             if (variables[i].value.length > 0) {
                 if (variables[i].value.length > 0) {
-                    let scope = variables[i].global ? `_G` : `local`;
+                    let scope = variables[i].global ? `` : `local`;
                     code += `${scope} ${variables[i].value}\n`
                 }
             }

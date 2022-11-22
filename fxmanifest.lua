@@ -2,8 +2,8 @@ fx_version 'cerulean'
 
 game "gta5"
 
-author "Xirvin"
-version '0.0.1'
+description "FiveM Development Menu by Xirvin."
+version '1.0.0'
 
 lua54 'yes'
 
@@ -11,15 +11,15 @@ lua54 'yes'
 ui_page 'html/index.html'
 
 client_script {
-  'client/**',
+  'client/client.lua',
+  'client/lib.lua',
 }
 server_script {
-  "server/**",
-  }
-shared_script {
-  "shared/**",
+  "server/server.lua",
   }
 
 files {
-  'html/**',
+  'html/index.html',
+  'html/script.js',
+  'html/style.css',
 }

@@ -70,3 +70,4 @@ RegisterNUICallback('ExecuteLua', function(data, cb)
     TriggerServerEvent('xv-dev:server:verifyExec', code, eventType)
     cb(1)
 end)
+
