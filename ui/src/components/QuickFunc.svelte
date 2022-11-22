@@ -2,6 +2,7 @@
   import type { variables, quickFuncs } from "src/@types";
   import Console from "./Console.svelte";
   import { execQuickFunc } from "../utils/luaHandler";
+  import { tooltip } from "../utils/tooltip";
 
 
     let activeVars: variables[] = [
@@ -17,10 +18,77 @@
             name: "TriggerServerEvent",
             server: true,
             params: [],
+            expectedParams: ['event', 'params'],
         },
         {
             code: "TriggerClientEvent",
             params: [],
+            expectedParams: ['event', 'params'],
+        },
+        {
+            code: "PlayAnim",
+            params: [],
+            expectedParams: ["dict", "anim", "flag", "duration"],
+        },
+        {
+            code: "ClearPedTasks",
+            params: [],
+            expectedParams: ['ped'],
+        },
+        {
+            code: "ClearPedTasksImmediately",
+            params: [],
+            expectedParams: ['ped'],
+        },
+        {
+            code: "SetEntityCoords",
+            params: [],
+            expectedParams: ['entity', 'x', 'y', 'z', 'alive', 'deadFlag', 'ragdollFlag', 'clearArea'],
+        },
+        {
+            code: "SetEntityCoordsNoOffset",
+            params: [],
+            expectedParams: ['entity', 'x', 'y', 'z', 'p4', 'p5', 'p6'],
+        },
+        {
+            code: "SetEntityRotation",
+            params: [],
+            expectedParams: ['entity', 'pitch', 'roll', 'yaw', 'rotationOrder', 'p5'],
+        },
+        {
+            code: "SetEntityVisible",
+            params: [],
+            expectedParams: ['entity', 'toggle'],
+        },
+        {
+            code: "SetEntityHeading",
+            params: [],
+            expectedParams: ['entity', 'heading'],
+        },
+        {
+            code: "SetEntityInvincible",
+            params: [],
+            expectedParams: ['entity', 'toggle'],
+        },
+        {
+            code: "SetEntityCanBeDamaged",
+            params: [],
+            expectedParams: ['entity', 'toggle'],
+        },
+        {
+            code: "GetEntityCoords",
+            params: [],
+            expectedParams: ['entity'],
+        },
+        {
+            code: "GetEntityHeading",
+            params: [],
+            expectedParams: ['entity'],
+        },
+        {
+            code: "GetEntityRotation",
+            params: [],
+            expectedParams: ['entity'],
         },
     ]
 
@@ -55,7 +123,7 @@
             {#each activeVars as varCon, i}
             <span class="flex flex-row gap-1 relative">
                 <div class:toggle-on={varCon.global} on:click={()=>{varCon.global=!varCon.global}} class="selection grid place-items-center w-auto h-auto "><i class="fa-solid fa-earth-americas"></i></div>
-                <textarea on:keydown={handleTab}   bind:value={varCon.value} rows="1" class="w-full h-full leading-6 text-[1.5rem] p-5" placeholder="Create variables ({varCon.global ? 'GLOBAL':'LOCAL'})"></textarea>
+                <textarea on:keydown={handleTab}  bind:value={varCon.value} rows="1" class="w-full h-full leading-6 text-[1.5rem] p-5" placeholder="Create variables ({varCon.global ? 'GLOBAL':'LOCAL'})"></textarea>
                 <div  on:click={()=>{if (activeVars.length > 1){activeVars.splice(i,1);activeVars = [...activeVars] }}} class="selection grid place-items-center w-auto h-auto fa-solid fa-trash"></div>
             </span>
             {/each}
@@ -70,7 +138,11 @@
                 <button on:click={()=>execQuickFunc(func, activeVars)} class="button exec-button grid place-items-center">
                     <span class="fas fa-play p-3 w-auto h-auto" ></span>
                 </button>
-                <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5">{func.name || func.code}</p>
+                {#if func.expectedParams}
+                <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5" use:tooltip title={`(${func.expectedParams})`}>{func.name || func.code}</p>
+                {:else}
+                <p class=" code-text w-fit h-fit leading-6 text-[1.5rem] p-5" >{func.name || func.code}</p>
+                {/if}
                 {#each func.params as param, v}
                     <span role="textbox" contenteditable="true" on:focusout={()=>selectedParam=null} on:dblclick={()=>{if (selectedParam==v){ selectedParam=null } else { selectedParam=v;}}} class:toggle-on={(selectedParam==v)} bind:innerHTML={param} rows="1" class="param-item relative max-w-fit  h-fit leading-6 text-[1.5rem] p-5" ></span>
                 {/each}

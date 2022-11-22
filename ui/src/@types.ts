@@ -8,4 +8,5 @@ export interface quickFuncs {
     name: string;
     server: boolean;
     params: string[];
+    expectedParams: string[];
 }
