@@ -30,13 +30,15 @@ export function execLuaRaw(code: string, eventType: string) {
 }
 
 export function execQuickFunc(funcObject: any, variables: any) {
-    if (funcObject.params.length == 0) updateOutput(`${funcObject.code} didn't have any parameters, therefore skipping.`, 'INFO');
+    if (funcObject.params.length == 0) {updateOutput(`${funcObject.code} didn't have any parameters, skipping.`, 'INFO'); return;};
     let code = ``
     if (variables.length > 0) {
         for (let i = 0; i < variables.length; i++) {
             if (variables[i].value.length > 0) {
-                let scope = variables[i].global ? `_G` : `local`;
-                code += `${scope} ${variables[i].value}\n`
+                if (variables[i].value.length > 0) {
+                    let scope = variables[i].global ? `_G` : `local`;
+                    code += `${scope} ${variables[i].value}\n`
+                }
             }
         }
         updateVariables(variables);

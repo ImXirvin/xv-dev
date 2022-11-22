@@ -2,10 +2,10 @@
     import { SendNUI } from "../utils/SendNui";
     import { tooltip } from "../utils/tooltip";
     import Console from "./Console.svelte";
-    import { execLuaRaw } from "../utils/luaHandler";
+    import { execLuaRaw,  } from "../utils/luaHandler";
+    import { luaCode } from "../store/stores";
 
 
-    let luaCode;
     let eventType: string;
 
     let hideOnExec: boolean = false;
@@ -14,8 +14,8 @@
 
 
     function execLua() {
-        // SendNUI("ExecuteLua", {code: luaCode, eventType: eventType, });
-        execLuaRaw(luaCode, eventType);
+        // SendNUI("ExecuteLua", {code: $luaCode, eventType: eventType, });
+        execLuaRaw($luaCode, eventType);
         if (hideOnExec) {
             SendNUI("hideUI");
         }
@@ -44,7 +44,7 @@
 <div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col overflow-y-scroll">
 
     <div class="w-[95%] h-full rounded-[1rem] mx-5">
-        <textarea on:keydown={handleTab} bind:value={luaCode} class="w-full h-full p-5 word-wrap" class:not-word-wrap={!wordWrap} placeholder="Enter Lua code here"></textarea>
+        <textarea on:keydown={handleTab} bind:value={$luaCode} class="w-full h-full p-5 word-wrap" class:not-word-wrap={!wordWrap} placeholder="Enter Lua code here"></textarea>
     </div>
 
     <span class="flex flex-row px-5 gap-5 mt-5 ">    

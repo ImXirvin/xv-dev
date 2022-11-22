@@ -1,96 +1,8 @@
 <script lang="ts">
-  import type { variables, quickFuncs } from "src/@types";
   import Console from "./Console.svelte";
   import { execQuickFunc } from "../utils/luaHandler";
   import { tooltip } from "../utils/tooltip";
-
-
-    let activeVars: variables[] = [
-        {
-            value: "",
-            global: false,
-        },
-    ]
-    
-    let quickFunc: Partial<quickFuncs>[] = [
-        {
-            code: "TriggerEvent",
-            name: "TriggerServerEvent",
-            server: true,
-            params: [],
-            expectedParams: ['event', 'params'],
-        },
-        {
-            code: "TriggerClientEvent",
-            params: [],
-            expectedParams: ['event', 'params'],
-        },
-        {
-            code: "PlayAnim",
-            params: [],
-            expectedParams: ["dict", "anim", "flag", "duration"],
-        },
-        {
-            code: "ClearPedTasks",
-            params: [],
-            expectedParams: ['ped'],
-        },
-        {
-            code: "ClearPedTasksImmediately",
-            params: [],
-            expectedParams: ['ped'],
-        },
-        {
-            code: "SetEntityCoords",
-            params: [],
-            expectedParams: ['entity', 'x', 'y', 'z', 'alive', 'deadFlag', 'ragdollFlag', 'clearArea'],
-        },
-        {
-            code: "SetEntityCoordsNoOffset",
-            params: [],
-            expectedParams: ['entity', 'x', 'y', 'z', 'p4', 'p5', 'p6'],
-        },
-        {
-            code: "SetEntityRotation",
-            params: [],
-            expectedParams: ['entity', 'pitch', 'roll', 'yaw', 'rotationOrder', 'p5'],
-        },
-        {
-            code: "SetEntityVisible",
-            params: [],
-            expectedParams: ['entity', 'toggle'],
-        },
-        {
-            code: "SetEntityHeading",
-            params: [],
-            expectedParams: ['entity', 'heading'],
-        },
-        {
-            code: "SetEntityInvincible",
-            params: [],
-            expectedParams: ['entity', 'toggle'],
-        },
-        {
-            code: "SetEntityCanBeDamaged",
-            params: [],
-            expectedParams: ['entity', 'toggle'],
-        },
-        {
-            code: "GetEntityCoords",
-            params: [],
-            expectedParams: ['entity'],
-        },
-        {
-            code: "GetEntityHeading",
-            params: [],
-            expectedParams: ['entity'],
-        },
-        {
-            code: "GetEntityRotation",
-            params: [],
-            expectedParams: ['entity'],
-        },
-    ]
+  import { activeVariables, quickFunctions } from "../store/stores";
 
     let selectedParam: number; // index of selected param
 
@@ -105,21 +17,20 @@
     }
 
     function addVar() {
-        activeVars.push({
+        $activeVariables.push({
             value: "",
             global: false,
         })
-        activeVars = [...activeVars]
+        $activeVariables = [...$activeVariables]
     }
 
 
     let searchTerm = "";
-    let searchResults: Partial<quickFuncs>[] = [];
+    let searchResults: any = [];
         
     $: {
         if (searchTerm.length > 0) {
-            searchResults = quickFunc.filter((func) => {
-                console.log(func)
+            searchResults = $quickFunctions.filter((func) => {
                 if (func.name) {
                     return func.name.toLowerCase().includes(searchTerm.toLowerCase())
                 }
@@ -127,7 +38,7 @@
             })
             console.log(searchResults)
         } else {
-            searchResults = quickFunc;
+            searchResults = $quickFunctions;
         }
     }
 
@@ -139,11 +50,11 @@
 <div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col overflow-y-scroll ">
     <div class="w-[95%] h-[fit] variables-container relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
         <div class="w-full max-h-[20rem] variables-container relative overflow-y-scroll  flex flex-col gap-1 ">
-            {#each activeVars as varCon, i}
+            {#each $activeVariables as varCon, i}
             <span class="flex flex-row gap-1 relative">
                 <div class:toggle-on={varCon.global} on:click={()=>{varCon.global=!varCon.global}} class="selection grid place-items-center w-auto h-auto "><i class="fa-solid fa-earth-americas"></i></div>
                 <textarea on:keydown={handleTab}  bind:value={varCon.value} rows="1" class="w-full h-full leading-6 text-[1.5rem] p-5" placeholder="Create variables ({varCon.global ? 'GLOBAL':'LOCAL'})"></textarea>
-                <div  on:click={()=>{if (activeVars.length > 1){activeVars.splice(i,1);activeVars = [...activeVars] }}} class="selection grid place-items-center w-auto h-auto fa-solid fa-trash"></div>
+                <div  on:click={()=>{if ($activeVariables.length > 1){$activeVariables.splice(i,1);$activeVariables = [...$activeVariables] }}} class="selection grid place-items-center w-auto h-auto fa-solid fa-trash"></div>
             </span>
             {/each}
         </div>
@@ -155,9 +66,9 @@
         </span>
         <div class="w-full max-h-[38rem] relative overflow-y-scroll flex flex-col gap-1 ">
             {#each searchResults as func}
-            <!-- {#each quickFunc as func, i} -->
+            <!-- {#each $quickFunctions as func, i} -->
             <div class="flex flex-wrap w-full gap-1 h-fit relative overflow-visible  ">
-                <button on:click={()=>execQuickFunc(func, activeVars)} class="button exec-button grid place-items-center">
+                <button on:click={()=>execQuickFunc(func, $activeVariables)} class="button exec-button grid place-items-center">
                     <span class="fas fa-play p-3 w-auto h-auto" ></span>
                 </button>
                 {#if func.expectedParams}
