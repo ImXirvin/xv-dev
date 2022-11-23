@@ -54,7 +54,7 @@ end
 
 RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType)
     local src = source
-    local allowed, allowedClient, allowedServer = CheckPerms(src)
+    local allowedClient, allowedServer = CheckPerms(src)
     if code == nil then
         TriggerClientEvent('openDevMenu', src)
         return
@@ -80,7 +80,7 @@ end)
 
 RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
     local src = source
-    local allowed, allowedClient, allowedServer = CheckPerms(src)
+    local allowedServer = CheckPerms(src)
     if not allowedServer and Config.StrictMode then
         TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
         print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
