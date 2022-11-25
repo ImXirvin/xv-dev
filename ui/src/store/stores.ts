@@ -36,6 +36,7 @@ let quickFunc: Partial<quickFuncs>[] = [
     {
         code: "TriggerClientEvent",
         params: [],
+        server: true,
         expectedParams: ['event', 'params'],
     },
     {
