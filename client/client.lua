@@ -50,11 +50,11 @@ RegisterNetEvent('xv-dev:client:UpdateOutput', function(output, eventType)
 end)
 
 RegisterNetEvent('xv-dev:client:ExecLua', function(code)
-    local func, err = load(code)
+    local func, err = load('return ' .. code, '@xv-dev')
     if func then
-        local status, result = pcall(func)
+        local status, result = pcall(func, '@xv-dev')
         if status then
-            output = "Executed"
+            output = tostring(result)
         else
             output = "Error: " .. (result or "Unknown")
         end
@@ -70,4 +70,3 @@ RegisterNUICallback('ExecuteLua', function(data, cb)
     TriggerServerEvent('xv-dev:server:verifyExec', code, eventType)
     cb(1)
 end)
-
