@@ -5,13 +5,110 @@
     import { execLuaRaw,  } from "../utils/luaHandler";
     import { luaCode } from "../store/stores";
 
+    //monaco editor
+    import type monaco from 'monaco-editor';
+    import { onMount } from 'svelte';
+    import luaWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
 
+    let editor: monaco.editor.IStandaloneCodeEditor;
+    let editorContainer: HTMLElement;
+    let inEditor:boolean = false;
     let eventType: string;
-
     let hideOnExec: boolean = false;
     let wordWrap: boolean = true;
 
+    //bind value of editor to luaCode store
+    $: if (editor) {
+        editor.onDidChangeModelContent((e) => {
+            luaCode.set(editor.getValue());
+        });
+    }
 
+    onMount(async () => {
+        inEditor = true;
+        self.MonacoEnvironment = {
+            getWorker: function (_moduleId: any) {
+                return new luaWorker();
+            }
+        };
+        const monaco = await import('monaco-editor');
+        editor = monaco.editor.create(editorContainer, {
+            value: $luaCode,
+            language: 'lua',
+            theme: 'vs-dark',
+            automaticLayout: true,
+            fontSize: 14,
+            fontFamily: 'JetBrains Mono',
+            // make the font Mono
+            fontLigatures: true,
+            letterSpacing: 1,
+            minimap: {
+                enabled: false
+            },
+            lineNumbers: 'on',
+            lineNumbersMinChars: 2,
+            scrollBeyondLastLine: false,
+            wordWrap: wordWrap,
+            wordWrapColumn: 80,
+            wordWrapMinified: true,
+            wrappingIndent: 'indent',
+            wrappingStrategy: 'advanced',
+            renderWhitespace: 'none',
+            renderControlCharacters: false,
+            renderIndentGuides: false,
+            renderLineHighlight: 'none',
+            renderFinalNewline: true,
+            overviewRulerBorder: false,
+            overviewRulerLanes: 0,
+            cursorBlinking: 'smooth',
+            cursorSmoothCaretAnimation: true,
+            cursorStyle: 'line',
+            cursorWidth: 2,
+            hideCursorInOverviewRuler: true,
+            mouseWheelZoom: true,
+            mouseWheelScrollSensitivity: 1,
+            multiCursorModifier: 'ctrlCmd',
+            multiCursorMergeOverlapping: true,
+            multiCursorPaste: 'spread',
+            accessibilitySupport: 'auto',
+            quickSuggestions: true,
+            quickSuggestionsDelay: 10,
+            parameterHints: true,
+            suggestOnTriggerCharacters: true,
+            colorDecorators: true,
+            folding: true,
+            acceptSuggestionOnEnter: 'on',
+            acceptSuggestionOnCommitCharacter: true,
+            snippetSuggestions: 'inline',
+            wordBasedSuggestions: true,
+            suggestSelection: 'recentlyUsed',
+            suggestFontSize: 14,
+            suggestLineHeight: 20,
+            suggest: {
+                localityBonus: true,
+                shareSuggestSelections: true,
+                showIcons: true,
+                showMethods: true,
+                showFunctions: true,
+                showConstructors: true,
+                showFields: true,
+                showVariables: true,
+                showProperties: true,
+                showEvents: true,
+                showUnits: true,
+                showValues: true,
+                showConstants: true,
+                showKeywords: true,
+                showWords: true,
+                showColors: true,
+                showReferences: true,
+            }
+        });
+
+        return () => {
+            editor.dispose();
+        };
+    });
 
     function execLua() {
         // SendNUI("ExecuteLua", {code: $luaCode, eventType: eventType, });
@@ -21,22 +118,9 @@
         }
     }
 
-    function handleTab(e) {
-        if (e.key === "Tab") {
-            e.preventDefault();
-            const start = e.target.selectionStart;
-            const end = e.target.selectionEnd;
-            e.target.value = e.target.value.substring(0, start) + "\t" + e.target.value.substring(end);
-            e.target.selectionStart = e.target.selectionEnd = start + 1;
-        }
+    $: if (editor) {
+        editor.updateOptions({ wordWrap: wordWrap ? 'on' : 'off' });
     }
-    
-
-    
-
-
-
-
 
 
 </script>
@@ -44,7 +128,7 @@
 <div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col overflow-y-scroll">
 
     <div class="w-[95%] h-full rounded-[1rem] mx-5">
-        <textarea on:keydown={handleTab} bind:value={$luaCode} class="w-full h-full p-5 word-wrap" class:not-word-wrap={!wordWrap} placeholder="Enter Lua code here"></textarea>
+        <div bind:this={editorContainer}  class="w-full text-start h-full p-1 word-wrap code-editor" class:not-word-wrap={!wordWrap} placeholder="Enter Lua code here">    </div>
     </div>
 
     <span class="flex flex-row px-5 gap-5 mt-5 ">    
@@ -64,7 +148,7 @@
     <Console/>
 </div>
 
-
+<!-- on:keydown={handleTab} bind:value={$luaCode} -->
 <style>
 
     *::-webkit-scrollbar {
@@ -72,7 +156,7 @@
     }
 
 
-    textarea {
+    .code-editor {
         resize: none;
         background-color: var(--color-secondary);
         color: var(--color-tertiary);

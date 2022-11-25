@@ -25,7 +25,6 @@ export const activeVariables = writable<variables[]>([]);
 
 
 
-
 let quickFunc: Partial<quickFuncs>[] = [
     {
         code: "TriggerEvent",
