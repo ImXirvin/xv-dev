@@ -1,21 +1,33 @@
 <script lang="ts">
-  import Drawer from "./components/Drawer.svelte";
-  import VisibilityProvider from "./providers/VisibilityProvider.svelte";
-  import { visibility } from "./store/stores";
-  import { debugData } from "./utils/debugData";
+  import Window from "./Components/Window.svelte";
+import VisibilityProvider from "./providers/VisibilityProvider.svelte";
+  import { debugData } from './utils/debugData';
   import { ReceiveNUI } from "./utils/ReceiveNUI";
+  import { debugMode, visibility } from "./store/stores";
+  
+  debugData([
+    {
+      action: 'browser',
+      data: {
+        browser: true,
+      },
+    },
+  ]);
 
-  ReceiveNUI("DevMenu", (data) => {
-    visibility.set(data.show);
+  ReceiveNUI("browser", (data) => {
+   $debugMode = data.browser;
+   if (data.browser) {
+    console.log("browser mode enabled");
+    $visibility = true;
+   } else {
+     console.log("browser mode disabled");
+   }
   });
-
-  // visibility.set(true)
-
 </script>
 
 <VisibilityProvider>
 
 <!-- PUT STUFF HERE  -->
-  <Drawer />
+<Window />
 
 </VisibilityProvider>

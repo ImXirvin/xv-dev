@@ -22,6 +22,6 @@
     "vite": "^2.9.12"
   },
   "dependencies": {
-    "svelte-agnostic-draggable": "^0.1.11"
+    "monaco-editor": "^0.34.1"
   }
 }
