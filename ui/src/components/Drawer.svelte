@@ -1,8 +1,6 @@
 <script lang="ts">
-    import { fly } from "svelte/transition";
-    import { debugMode } from "../store/stores";
 
-    let showSide: boolean = false;
+    let isOpen = true;
     export let selectedComponent;
 
     let options =  [
@@ -26,28 +24,139 @@
 
 </script>
 
-<div class="h-[calc(100%-30px)] drawer absolute w-[30rem] flex flex-col text-center items-center top-[30px] left-0">
-    <h1 class="w-full font-bold text-[2rem]">Components</h1>
-    <div class="w-full flex flex-col gap-0">
+<nav class="navbar">
+    <ul class="navbar-nav gap-2">
+        <li class=" nav-item">
+            <p href="#" class="top-item">
+              <span class="link-text logo-text">Components</span>
+              <i class="fas fa-bars"></i>
+            </p>
+        </li>
         {#each options as option}
-            <button class=" button bg-gray-700 text-white flex flex-row gap-5 items-center relative min-h-max" on:click={() => selected = option}>
-                <i class="{option.icon}"></i>
-                <p>{option.name}</p>
-            </button>
+            <li class="nav-item">
+                <p class="nav-link" on:click={() => selected = option}>
+                    <i class="{option.icon}"></i>
+                    <span class="link-text  ">{option.name}</span>
+                </p>
+            </li>
         {/each}
-    </div>
-
-</div>
+    </ul>
+</nav>
 
 <style>
-    .drawer {
-        transition: all 0.5s ease-in-out;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-        border-bottom-left-radius: 10px;
-        color: var(--color-tertiary);
-        box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+    .navbar::-webkit-scrollbar {
+        display: none;
     }
+
+    .top-item {
+        display: flex;
+        align-items: center;
+        height: 5rem;
+        color: var(--color-tertiary);
+        text-decoration: none;
+        transition: var(--transition-speed);
+    }
+
+    .top-item i {
+        width: 2rem;
+        min-width: 2rem;
+        margin: 0 1.5rem;
+    }
+
+    :root {
+    --transition-speed: 200ms;
+    }
+
+    .navbar {
+  position: relative;
+  background-color: var(--color-primary);
+  transition: width 600ms ease;
+  overflow: scroll;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* height: 100%; */
+  position: relative;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: var(--color-tertiary);
+  text-decoration: none;
+  transition: var(--transition-speed);
+}
+
+.nav-link:hover
+ {
+  background: var(--color-tertiary);
+  color: var(--color-primary);
+}
+
+.link-text {
+  display: none;
+  margin-left: 1rem;
+  /* make it only 1 line */
+    white-space: nowrap;
+}
+
+.nav-link i {
+  width: 2rem;
+  min-width: 2rem;
+  margin: 0 1.5rem;
+}
+
+.nav-link:active { 
+    background: var(--color-secondary);
+    color: var(--color-tertiary);
+}
+
+
+.logo-text
+{
+  display: inline;
+  position: absolute;
+  left: -999px;
+  transition: var(--transition-speed);
+}
+
+
+
+.navbar {
+    top: 0;
+    left:0;
+    width: 5rem;
+    height: 100%;
+    border-radius: 1rem;
+  }
+
+  .navbar:hover {
+    width: 20rem;
+  }
+
+  .navbar:hover .link-text {
+    display: inline;
+  }
+
+
+
+  .navbar:hover .logo-text
+  {
+    left: 3rem;
+  }
 
 
 </style>
