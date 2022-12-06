@@ -1,26 +1,11 @@
 <script lang="ts">
+    import LuaExec from "./LuaExec.svelte";
 
-    let isOpen = true;
-    export let selectedComponent;
 
-    let options =  [
-        {
-            name: "Lua Executor",
-            icon: "fas fa-terminal",
-        //   component: LuaExec,
-        },
-        {
-            name: "Quick Functions",
-            icon: "fas fa-bolt",
-        //   component: QuickFunc,
-        },
-        {
-            name: "History",
-            icon: "fas fa-history",
-        //   component: History,
-        },
-    ];
-    let selected = options[0]
+    export let options =  [];
+    export let selectedIndex;
+
+
 
 </script>
 
@@ -28,13 +13,13 @@
     <ul class="navbar-nav gap-2">
         <li class=" nav-item">
             <p href="#" class="top-item">
-              <span class="link-text logo-text">Components</span>
               <i class="fas fa-bars"></i>
+              <span class="link-text">Components</span>
             </p>
         </li>
-        {#each options as option}
+        {#each options as option, i}
             <li class="nav-item">
-                <p class="nav-link" on:click={() => selected = option}>
+                <p class:selected={selectedIndex==i? true : false} class="nav-link" on:click={() =>selectedIndex = i }>
                     <i class="{option.icon}"></i>
                     <span class="link-text  ">{option.name}</span>
                 </p>
@@ -46,6 +31,19 @@
 <style>
     .navbar::-webkit-scrollbar {
         display: none;
+    }
+
+    .selected,
+    .selected  i,
+    .selected .link-text {
+        background-color: transparent;
+        color: var(--color-tertiary);
+    }
+
+    .selected:hover,
+    .selected:hover  i,
+    .selected:hover .link-text {
+      color: var(--color-primary);
     }
 
     .top-item {
@@ -108,7 +106,7 @@
 
 .link-text {
   display: none;
-  margin-left: 1rem;
+  margin-left: 0rem;
   /* make it only 1 line */
     white-space: nowrap;
 }
@@ -123,16 +121,6 @@
     background: var(--color-secondary);
     color: var(--color-tertiary);
 }
-
-
-.logo-text
-{
-  display: inline;
-  position: absolute;
-  left: -999px;
-  transition: var(--transition-speed);
-}
-
 
 
 .navbar {

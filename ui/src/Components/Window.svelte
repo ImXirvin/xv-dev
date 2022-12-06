@@ -1,5 +1,6 @@
 <script>
   import Drawer from "./Drawer.svelte"
+  import LuaExec from "./LuaExec.svelte";
 
 
 let moving = false;
@@ -191,16 +192,39 @@ let moving = false;
 		}
 	}
 
-	let selectedComponent = null
+	let options =  [
+        {
+            name: "Lua Executor",
+            icon: "fas fa-terminal",
+            component: LuaExec,
+        },
+        {
+            name: "Quick Functions",
+            icon: "fas fa-bolt",
+        //   component: QuickFunc,
+        },
+        {
+            name: "History",
+            icon: "fas fa-history",
+        //   component: History,
+        },
+        {
+            name: "Settings",
+            icon: "fas fa-cog",
+        }
+    ];
+
+	let selectedIndex = 0;
 </script>
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
 	<div bind:this={Window} class="Window flex flex-col" style="left: {WindowLeft}px; top: {WindowTop}px;" use:move use:resize>
         <div on:mousedown={onMouseDown}  class="Window-Titlebar flex items-center"><p class="text-center font-bold">{WindowTitle}</p></div>
-		<div class="Window-Content">
-			<svelte:component this={selectedComponent} />
-			<Drawer/>
+		<div class="Window-Content flex flex-row gap-1">
+			<Drawer {options} {selectedIndex} />
+			<!-- <LuaExec /> -->
+			<svelte:component this={options[selectedIndex].component} />
 		</div>
 
 	</div>
