@@ -47,7 +47,7 @@ $: console.log(eventType)
 
   </div>
 
-  <div class="w-full relative flex flex-row gap-5 inline pl-1">
+  <div class="w-full relative flex flex-row gap-5 pl-1">
     <button class="prio self-end" on:click={() => luaHandler.ExecuteLua(luaCode, eventType, source)}>
       <i class="fa-solid fa-play"></i>
       Execute
@@ -71,7 +71,7 @@ $: console.log(eventType)
     </div>
 
     {#if initialClearClick}
-      <button class="def" on:click={() => {luaCode = "";initialClearClick = false}}>
+      <button class="def" on:click={() => {console.log("no")}}>
         Yes
       </button>
       <button class="def" on:click={() => initialClearClick = false}>

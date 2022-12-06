@@ -3,7 +3,7 @@
   import LuaExec from "./LuaExec.svelte";
 
 
-let moving = false;
+	let moving = false;
 	let WindowLeft;
 	let WindowTop;
 	let WindowWidth;
