@@ -1,7 +1,4 @@
 <script lang="ts">
-    import LuaExec from "./LuaExec.svelte";
-
-
     export let options =  [];
     export let selectedIndex;
 
