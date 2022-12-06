@@ -2,7 +2,10 @@
   import { AceEditor } from "svelte-ace";
   import { LuaHandler } from "../utils/luaHandler";
   import { theme } from "../store/stores";
-
+  import {tippy} from 'svelte-tippy';
+  import 'tippy.js/dist/tippy.css';
+  import { tooltip } from "../utils/tooltip";
+  const tt = tooltip;
   import "brace/mode/lua";
   import "brace/theme/clouds_midnight";
   import "brace/theme/merbivore_soft";
@@ -20,40 +23,51 @@
   let eventType: string = "client";
   let source: string;
 
-$: console.log(eventType)
+  function execLua() {
+    console.log(hideOnExec)
+    luaHandler.ExecuteLua(luaCode, eventType, source);
+  }
+
+  function clearLua() {
+    luaCode = "";
+    initialClearClick = false;
+  }
 </script>
+
 
 
 <div class="w-full h-full flex flex-col gap-5 z-0">
   <div class="w-full relative h-full">
     <AceEditor
-    on:selectionChange={(obj) => console.log(obj.detail)}
-    on:paste={(obj) => console.log(obj.detail)}
-    on:input={(obj) => console.log(obj.detail)}
-    on:focus={() => console.log('focus')}
-    on:documentChange={(obj) => console.log(`document change : ${obj.detail}`)}
-    on:cut={() => console.log('cut')}
-    on:cursorChange={() => console.log('cursor change')}
-    on:copy={() => console.log('copy')}
-    on:init={(editor) => console.log(editor.detail)}
-    on:commandKey={(obj) => console.log(obj.detail)}
-    on:changeMode={(obj) => console.log(`change mode : ${obj.detail}`)}
-    on:blur={() => console.log('blur')}
-    width='100%'
-    height='100%'
-    lang="lua"
-    theme="{$theme}"
-    value={luaCode} />
-
+      on:selectionChange={(obj) => console.log(obj.detail)}
+      on:paste={(obj) => console.log(obj.detail)}
+      on:input={(obj) => console.log(obj.detail)}
+      on:focus={() => console.log('focus')}
+      on:documentChange={(obj) => console.log(`document change : ${obj.detail}`)}
+      on:cut={() => console.log('cut')}
+      on:cursorChange={() => console.log('cursor change')}
+      on:copy={() => console.log('copy')}
+      on:init={(editor) => console.log(editor.detail)}
+      on:commandKey={(obj) => console.log(obj.detail)}
+      on:changeMode={(obj) => console.log(`change mode : ${obj.detail}`)}
+      on:blur={() => console.log('blur')}
+      width='100%'
+      height='100%'
+      lang="lua"
+      theme="{$theme}"
+      bind:value={luaCode} 
+    />
   </div>
 
   <div class="w-full relative flex flex-row gap-5 pl-1">
-    <button class="prio self-end" on:click={() => luaHandler.ExecuteLua(luaCode, eventType, source)}>
+    <button class="prio self-end" on:click={execLua}>
       <i class="fa-solid fa-play"></i>
       Execute
     </button>
 
-    <div class="btn-def min-w-[4rem] grid place-items-center" on:click={() => hideOnExec = !hideOnExec}>
+    <div class="btn-def min-w-[4rem] grid place-items-center" on:click={() => hideOnExec = !hideOnExec}
+    use:tippy={{content: `${hideOnExec ? tt.hideOnExec : tt.showOnExec}`, placement: 'top'}}
+    >
       {#if !hideOnExec}
         <i class="fa-solid fa-eye"></i>
       {:else}
@@ -61,7 +75,7 @@ $: console.log(eventType)
       {/if}
     </div>
 
-    <div class="btn-def" on:click={() => initialClearClick = true}>
+    <div class="btn-def" on:click={() => initialClearClick = true} use:tippy={{content: `${tt.clearEditor}`,  placement: 'top'}}>
       {#if !initialClearClick}
       <i class="fa-solid fa-trash"></i>
         Clear
@@ -71,7 +85,7 @@ $: console.log(eventType)
     </div>
 
     {#if initialClearClick}
-      <button class="def" on:click={() => {console.log("no")}}>
+      <button class="def" on:click={clearLua}>
         Yes
       </button>
       <button class="def" on:click={() => initialClearClick = false}>
@@ -79,7 +93,9 @@ $: console.log(eventType)
       </button>
     {/if}
 
-    <select bind:value={eventType} class="btn-def">
+    <select bind:value={eventType} class="btn-def"
+    use:tippy={{content: `${eventType == "source"? tt.execOnSource : `Execute on: ${eventType}`}`, placement: 'top'}}
+    >
       <option value="client">Client</option>
       <option value="server">Server</option>
       <option value="source">Source</option>
