@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Window from "./Components/Window.svelte";
+  import Container from "./components/Container.svelte";
 import VisibilityProvider from "./providers/VisibilityProvider.svelte";
   import { debugData } from './utils/debugData';
   import { ReceiveNUI } from "./utils/ReceiveNUI";
@@ -28,6 +28,6 @@ import VisibilityProvider from "./providers/VisibilityProvider.svelte";
 <VisibilityProvider>
 
 <!-- PUT STUFF HERE  -->
-<Window />
+<Container />
 
 </VisibilityProvider>
