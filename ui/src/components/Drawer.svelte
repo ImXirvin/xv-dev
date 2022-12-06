@@ -6,7 +6,6 @@
     export let selectedIndex;
 
 
-
 </script>
 
 <nav class="navbar">
@@ -68,7 +67,7 @@
     .navbar {
   position: relative;
   background-color: var(--color-primary);
-  transition: width 600ms ease;
+  transition: min-width 0.6s ease, width 0.6s ease, max-width 0.6s ease;
   overflow: scroll;
 }
 
@@ -132,7 +131,11 @@
   }
 
   .navbar:hover {
-    width: 20rem;
+    width: 200px;
+  }
+
+  .min-width {
+    min-width: 200px;
   }
 
   .navbar:hover .link-text {

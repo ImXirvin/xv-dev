@@ -6,6 +6,9 @@
     margin: 0;
     padding: 0;
 }
+*:focus {
+    outline: none;
+}
 :root {
     font-size: 62.5%;
     --color-primary: rgba(0, 0, 0);
@@ -20,36 +23,35 @@ font-size: 1.6rem;
 overflow: hidden;
 }
 
-.button {
-    background-color: var(--color-primary);
-    color: var(--color-tertiary);
-    border: none;
-    padding: 1rem 2rem;
-    margin: 1rem;
-    border-radius: 0.5rem;
-    font-size: 1.6rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
+@layer components {
+    button.def,
+    .btn-def {
+        background-color: var(--color-tertiary);
+        color: var(--color-secondary);
+        transition: all 0.1s ease-in-out;
+        @apply  font-bold py-2 px-4 rounded;
+    }
+
+
+    button.def:hover,
+    .btn-def:hover {
+        @apply bg-gray-400;
+    }
+
+    button.prio {
+        background-color: var(--color-primary);
+        color: var(--color-tertiary);
+        box-shadow: 0 0 0 0.2rem var(--color-tertiary);
+        transition: all 0.1s ease-in-out;
+        @apply  font-bold py-2 px-4 rounded;
+    }
+
+    button.prio:hover {
+        background-color: var(--color-tertiary);
+        color: var(--color-primary);
+    }
 }
 
-.button:hover {
-    background-color: var(--color-tertiary);
-    color: var(--color-primary);
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
 }
-
-.button--primary {
-    background-color: var(--color-primary);
-    color: var(--color-tertiary);
-}
-
-.button--secondary {
-    background-color: var(--color-secondary);
-    color: var(--color-tertiary);
-}
-
-.button--tertiary {
-    background-color: var(--color-tertiary);
-    color: var(--color-primary);
-}
-
