@@ -2,7 +2,7 @@
   import { AceEditor } from "svelte-ace";
   import { LuaHandler } from "../utils/luaHandler";
   import { SendNUI } from "../utils/SendNUI";
-  import { theme } from "../store/stores";
+  import { theme, codeStore } from "../store/stores";
   import {tippy} from 'svelte-tippy';
   import 'tippy.js/dist/tippy.css';
   import { tooltip } from "../utils/tooltip";
@@ -23,19 +23,18 @@
   let initialClearClick = false;
   let hideOnExec = false;
 
-  let luaCode: string = "";
   let eventType: string = "client";
   let source: string;
 
   function execLua() {
-    luaHandler.ExecuteLua(luaCode, eventType, source);
+    luaHandler.ExecuteLua($codeStore, eventType, source);
     if (hideOnExec) {
       SendNUI("hideUI")
     }
   }
 
   function clearLua() {
-    luaCode = "";
+    $codeStore = "";
     initialClearClick = false;
   }
 
@@ -65,7 +64,7 @@
       height='100%'
       lang="lua"
       theme="{$theme}"
-      bind:value={luaCode} 
+      bind:value={$codeStore} 
     />
   </div>
 
@@ -85,7 +84,7 @@
       {/if}
     </div>
 
-    <div class="btn-def" on:click={() => initialClearClick = true} use:tippy={{content: `${tt.clearEditor}`,  placement: 'top'}}>
+    <div class="btn-def" on:click={() => initialClearClick = true} use:tippy={{content: `${initialClearClick ? tt.clearNoUndo : tt.clearEditor}`,  placement: 'top'}}>
       {#if !initialClearClick}
       <i class="fa-solid fa-trash"></i>
         Clear
