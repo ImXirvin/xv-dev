@@ -1,4 +1,8 @@
 <script lang="ts">
+      import {tippy} from 'svelte-tippy';
+  import 'tippy.js/dist/tippy.css';
+  import { tooltip } from "../utils/tooltip";
+  const tt = tooltip;
     export let options =  [];
     export let selectedIndex;
 
@@ -14,13 +18,24 @@
             </p>
         </li>
         {#each options as option, i}
-            <li class="nav-item">
+            <li use:tippy={{content: `${option.name}`, placement: "right"}} class="nav-item">
                 <p class:selected={selectedIndex==i? true : false} class="nav-link" on:click={() =>selectedIndex = i }>
                     <i class="{option.icon}"></i>
-                    <span class="link-text  ">{option.name}</span>
+                    <!-- <span class="link-text  ">{option.name}</span> -->
                 </p>
             </li>
         {/each}
+        <li class="w-full h-fit last-item">
+          <li use:tippy={{content: `Toggle Output Menu`, placement: "right"}} class="nav-item self-end">
+            <p class:selected={false} class="nav-link" on:click={() =>console.log('output')}>
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </p>
+          </li>
+          <li use:tippy={{content: `Debug`, placement: "right"}} class="nav-item self-end">
+            <p class:selected={false} class="nav-link" on:click={() =>console.log('debug')}>
+              <i class="fas fa-bug"></i>
+            </p>
+          </li>
     </ul>
 </nav>
 
@@ -66,6 +81,8 @@
   background-color: var(--color-primary);
   transition: min-width 0.6s ease, width 0.6s ease, max-width 0.6s ease;
   overflow: scroll;
+  min-width: fit-content;
+  min-height: fit-content;
 }
 
 .navbar-nav {
@@ -75,7 +92,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* height: 100%; */
+  height: 100%;
   position: relative;
 }
 
@@ -83,6 +100,9 @@
   width: 100%;
 }
 
+.last-item {
+  margin-top: auto;
+}
 
 
 .nav-link {
@@ -126,18 +146,10 @@
     height: 100%;
     border-radius: 1rem;
   }
-
-  .navbar:hover {
-    width: 200px;
-  }
-
-  .min-width {
-    min-width: 200px;
-  }
-
+/* 
   .navbar:hover .link-text {
     display: inline;
-  }
+  } */
 
 
 
