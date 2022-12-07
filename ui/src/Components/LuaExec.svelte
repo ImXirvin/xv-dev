@@ -1,11 +1,14 @@
 <script lang="ts">
   import { AceEditor } from "svelte-ace";
   import { LuaHandler } from "../utils/luaHandler";
+  import { SendNUI } from "../utils/SendNUI";
   import { theme } from "../store/stores";
   import {tippy} from 'svelte-tippy';
   import 'tippy.js/dist/tippy.css';
   import { tooltip } from "../utils/tooltip";
   const tt = tooltip;
+
+  //for ace editor
   import "brace/mode/lua";
   import "brace/theme/clouds_midnight";
   import "brace/theme/merbivore_soft";
@@ -13,6 +16,7 @@
   import "brace/theme/tomorrow_night_eighties";
   import "brace/theme/twilight";
   import "brace/theme/vibrant_ink";
+
 
   const luaHandler = new LuaHandler();
 
@@ -24,13 +28,19 @@
   let source: string;
 
   function execLua() {
-    console.log(hideOnExec)
     luaHandler.ExecuteLua(luaCode, eventType, source);
+    if (hideOnExec) {
+      SendNUI("hideUI")
+    }
   }
 
   function clearLua() {
     luaCode = "";
     initialClearClick = false;
+  }
+
+  $: if (eventType !== "source") {
+    source = undefined;
   }
 </script>
 
