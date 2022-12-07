@@ -1,6 +1,7 @@
 <script>
   import Drawer from "./Drawer.svelte"
   import LuaExec from "./LuaExec.svelte";
+  import QuickFunc from "./QuickFunc.svelte";
 
 
 	let moving = false;
@@ -202,7 +203,7 @@
         {
             name: "Quick Functions",
             icon: "fas fa-bolt",
-        //   component: QuickFunc,
+          component: QuickFunc,
         },
         {
             name: "History",
@@ -216,6 +217,7 @@
     ];
 
 	let selectedIndex = 0;
+	$:console.log(selectedIndex)
 </script>
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
@@ -223,7 +225,7 @@
 	<div bind:this={Window} class="Window flex flex-col" style="left: {WindowLeft}px; top: {WindowTop}px;" use:move use:resize>
         <div on:mousedown={onMouseDown}  class="Window-Titlebar flex items-center"><p class="text-center font-bold">{WindowTitle}</p></div>
 		<div class="Window-Content flex flex-row gap-1">
-			<Drawer {options} {selectedIndex} />
+			<Drawer {options} bind:selectedIndex />
 			<!-- <LuaExec /> -->
 			<svelte:component this={options[selectedIndex].component} />
 		</div>

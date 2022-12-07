@@ -5,8 +5,6 @@
   const tt = tooltip;
     export let options =  [];
     export let selectedIndex;
-
-
 </script>
 
 <nav class="navbar">
