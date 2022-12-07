@@ -10,8 +10,6 @@
 	let WindowHeight;
 	let Window;
 
-	let minHeight = window.innerHeight * 0.3;
-	let minWidth =  window.innerWidth * 0.3;
 
 	let WindowTitle = "XV-DEV";
 	
@@ -109,37 +107,37 @@
 			let delta
 			
 			if (direction.match('east')) {
-				if (initialRect.width + (event.pageX - initialPos.x) < minWidth == false) {
+				// if (initialRect.width + (event.pageX - initialPos.x) < minWidth == false) {
 					delta = event.pageX - initialPos.x
 					element.style.width = `${initialRect.width + delta}px`
 					WindowWidth = initialRect.width + delta;
-				}
+				// }
 			}
 			
 			if (direction.match('west')) {
-				if (initialRect.width - (event.pageX - initialPos.x) < minWidth == false) {
+				// if (initialRect.width - (event.pageX - initialPos.x) < minWidth == false) {
 					delta = initialPos.x - event.pageX
 					element.style.left = `${initialRect.left - delta}px`
 					element.style.width = `${initialRect.width + delta}px`
 					WindowLeft = initialRect.left - delta
-				}
+				// }
 			}
 			
 			if (direction.match('north')) {
-				if (initialRect.height - event.pageY + initialPos.y < minHeight == false) {
+				// if (initialRect.height - event.pageY + initialPos.y < minHeight == false) {
 				delta = initialPos.y - event.pageY
 				element.style.top = `${initialRect.top - delta}px`
 				element.style.height = `${initialRect.height + delta}px`
 				WindowTop = initialRect.top - delta
-				}
+				// }
 			}
 			
 			if (direction.match('south')) {
-				if (initialRect.height + event.pageY - initialPos.y < minHeight == false) {
+				// if (initialRect.height + event.pageY - initialPos.y < minHeight == false) {
 				delta = event.pageY - initialPos.y
 				element.style.height = `${initialRect.height + delta}px`
 				WindowHeight = initialRect.height + delta
-				}
+				// }
 			}
 		}
 		
@@ -159,7 +157,7 @@
 	}
 
 	let initial = false
-	$: if (Window && !initial) {
+	$: if (Window && initial == false) {
 		initial = true
 		Window.getBoundingClientRect()
 		WindowHeight = Window.getBoundingClientRect().height
@@ -187,6 +185,9 @@
 	
 	function onMouseMove(e) {
 		if (moving) {
+			Window.getBoundingClientRect()
+			WindowHeight = Window.getBoundingClientRect().height
+			WindowWidth = Window.getBoundingClientRect().width
 			WindowLeft += e.movementX;
 			WindowTop += e.movementY;
 		}
@@ -211,7 +212,7 @@
         {
             name: "Settings",
             icon: "fas fa-cog",
-        }
+        },
     ];
 
 	let selectedIndex = 0;
@@ -244,6 +245,8 @@
 		position: absolute;
 		border-radius: 10px;
 		box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+		min-width: fit-content;
+		min-height: 30rem;
 	}
 
     .Window-Titlebar {
@@ -258,13 +261,13 @@
 		border-top-right-radius: 10px;
 		border-top-left-radius: 10px;
 		color: white
-		
     }
 
 	.Window-Content {
 		height: 100%;
 		width: 100%;
 		padding: 1rem;
+		min-height: 25rem;
 	}
 	
 	
