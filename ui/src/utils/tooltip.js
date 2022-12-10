@@ -6,4 +6,8 @@ export const tooltip = {
     clearEditor: "Clear Editor",
     clearNoUndo: "WARNING: NO UNDO",
     execOnSource: "Multiple sources using comma",
+
+    //Quick Functions
+    removeVar: "Remove Variable",
+    addVar: "Add Variable",
 }
