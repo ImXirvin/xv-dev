@@ -1,10 +1,13 @@
 <script lang="ts">
-      import {tippy} from 'svelte-tippy';
+  import {tippy} from 'svelte-tippy';
   import 'tippy.js/dist/tippy.css';
   import { tooltip } from "../utils/tooltip";
+  import { outputMode, debugMode } from "../store/stores";
+
   const tt = tooltip;
-    export let options =  [];
-    export let selectedIndex;
+  export let options =  [];
+  export let selectedIndex;
+
 </script>
 
 <nav class="navbar">
@@ -23,17 +26,18 @@
                 </p>
             </li>
         {/each}
-        <li class="w-full h-fit last-item">
+        <div class="w-full h-fit last-item">
           <li use:tippy={{content: `Toggle Output Menu`, placement: "right"}} class="nav-item self-end">
-            <p class:selected={false} class="nav-link" on:click={() =>console.log('output')}>
-              <i class="fa-solid fa-right-from-bracket"></i>
+            <p class:selected={$outputMode} class="nav-link" on:click={() =>$outputMode=!$outputMode}>
+              <i class="fas fa-right-from-bracket"></i>
             </p>
           </li>
           <li use:tippy={{content: `Debug`, placement: "right"}} class="nav-item self-end">
-            <p class:selected={false} class="nav-link" on:click={() =>console.log('debug')}>
+            <p class:selected={$debugMode} class="nav-link" on:click={() =>$debugMode=!$debugMode}>
               <i class="fas fa-bug"></i>
             </p>
           </li>
+        </div>
     </ul>
 </nav>
 
@@ -42,17 +46,23 @@
         display: none;
     }
 
-    .selected,
-    .selected  i,
-    .selected .link-text {
-        background-color: transparent;
-        color: var(--color-tertiary);
+    i {
+      background-color: transparent;
+    }
+
+    .selected {
+        background-color: var(--color-tertiary);
+    }
+
+    .selected i {
+      color: var(--color-primary);
     }
 
     .selected:hover,
     .selected:hover  i,
-    .selected:hover .link-text {
+    .selected:hover {
       color: var(--color-primary);
+      /* background-color: var(--color-tertiary); */
     }
 
     .top-item {
