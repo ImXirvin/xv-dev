@@ -13,3 +13,8 @@ theme.subscribe((value) => localStorage.theme = value)
 const savedCode = localStorage.code;
 export const codeStore = writable(savedCode || "");
 codeStore.subscribe((value) => localStorage.code = value)
+
+//for variables
+const savedVariables = localStorage.variables;
+export const variablesStore = writable(savedVariables || "");
+variablesStore.subscribe((value) => sessionStorage.variables = value)
