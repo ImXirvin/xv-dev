@@ -1,6 +1,9 @@
 import { writable } from "svelte/store";
+import { QuickFunctionDefault } from "../utils/QuickFunctions";
 
 export const visibility = writable(false);
+
+export const outputMode = writable(false);
 export const debugMode = writable(false);
 
 
@@ -16,5 +19,10 @@ codeStore.subscribe((value) => localStorage.code = value)
 
 //for variables
 const savedVariables = localStorage.variables;
-export const variablesStore = writable(savedVariables || "");
+export const variablesStore = writable(savedVariables || []);
 variablesStore.subscribe((value) => sessionStorage.variables = value)
+
+//for quick functions
+const savedQuickFunctions = localStorage.quickFunctions;
+export const quickFunctionsStore = writable(savedQuickFunctions || QuickFunctionDefault);
+quickFunctionsStore.subscribe((value) => localStorage.quickFunctions = value)
