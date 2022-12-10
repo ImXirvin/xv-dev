@@ -1,6 +1,9 @@
 <script>
+  // @ts-ignore
   import Drawer from "./Drawer.svelte"
+  // @ts-ignore
   import LuaExec from "./LuaExec.svelte";
+  // @ts-ignore
   import QuickFunc from "./QuickFunc.svelte";
 
 

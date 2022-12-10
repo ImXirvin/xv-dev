@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Container from "./components/Container.svelte";
-import VisibilityProvider from "./providers/VisibilityProvider.svelte";
+  import MovableWin from "./Components/MovableWin.svelte";
+  import VisibilityProvider from "./providers/VisibilityProvider.svelte";
   import { debugData } from './utils/debugData';
   import { ReceiveNUI } from "./utils/ReceiveNUI";
   import { debugMode, visibility } from "./store/stores";
@@ -28,6 +28,6 @@ import VisibilityProvider from "./providers/VisibilityProvider.svelte";
 <VisibilityProvider>
 
 <!-- PUT STUFF HERE  -->
-<Container />
+<MovableWin />
 
 </VisibilityProvider>
