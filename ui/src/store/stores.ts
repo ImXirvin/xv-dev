@@ -13,16 +13,19 @@ export const theme = writable(selectedTheme || "merbivore_soft");
 theme.subscribe((value) => localStorage.theme = value)
 
 //for code
-const savedCode = localStorage.code;
-export const codeStore = writable(savedCode || "");
-codeStore.subscribe((value) => localStorage.code = value)
+export const codeStore = writable( localStorage.getItem('code') || "");
+codeStore.subscribe((value) => {
+    localStorage.setItem('code', value);
+})
 
 //for variables
-const savedVariables = localStorage.variables;
-export const variablesStore = writable(savedVariables || []);
-variablesStore.subscribe((value) => sessionStorage.variables = value)
+export const variablesStore = writable([]);
 
 //for quick functions
-const savedQuickFunctions = localStorage.quickFunctions;
-export const quickFunctionsStore = writable(savedQuickFunctions || QuickFunctionDefault);
-quickFunctionsStore.subscribe((value) => localStorage.quickFunctions = value)
+
+export const quickFunctionsStore = writable( JSON.parse(localStorage.getItem('quickFunctions')) || QuickFunctionDefault);
+quickFunctionsStore.subscribe((value) => {
+    localStorage.setItem('quickFunctions', JSON.stringify(value));
+})
+
+
