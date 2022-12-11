@@ -10,7 +10,7 @@ export const tooltip = {
     //Quick Functions
     removeVar: "Remove Variable",
     addVar: "Add Variable",
-
+    execute: "Execute",
     addParam: "Add Parameter",
     removeParam: "Remove Parameter",
 }

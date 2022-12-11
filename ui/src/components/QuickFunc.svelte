@@ -62,11 +62,11 @@
 
 
 
-<div class="w-full h-full flex flex-col gap-5 z-0">
-    <div class="variables-container relative w-100 max-h-[50%] ">
-        <ul class="w-full flex h-fit max-h-[100%] scrollbar-hide overflow-y-scroll  flex-col gap-5 relative"> 
+<div class="parent-container w-full h-full flex flex-col gap-5 z-0">
+    <div class="variables-container relative w-full min-h-fit max-h-full  flex-grow flex-shrink">
+        <ul class="w-full min-h-fit flex h-full scrollbar-hide overflow-y-scroll  flex-col gap-5 relative"> 
             {#each $variablesStore as variable, i}
-                <li class="w-full h-10 flex flex-row relative gap-2 items-center">
+                <li class="w-full h-fit flex flex-row relative gap-2 items-center ">
                     <button
                         class:selected={variable.global}
                         class="sec"
@@ -75,10 +75,11 @@
                     >
                         <i class="fas fa-globe"></i>
                     </button>
-                    <input
-                        class="w-full h-[3rem] rounded-md variable-input leading-6"
+                    <textarea
+                        class="w-full min-h-[3rem] rounded-md variable-input "
                         type="text"
                         bind:value={variable.value}
+                        rows="1"
                         placeholder="Declare a variable (Current Scope: {variable.global ? 'Global' : 'Local'})"
                     />
                     <button
@@ -103,23 +104,24 @@
             </button>
         </ul>
     </div>
-    <div class="quick-functions-container h-fit relative w-100 max-h-[100%] flex flex-col gap-2">
+    <div class="functions-container h-full relative w-full flex flex-col gap-2 flex-grow flex-shrink">
         <span class=" relative">
             <input bind:value={quickSearcTerm} class=" relative h-[3rem] rounded-md variable-input leading-6" placeholder="Search for a function" />
         </span>
-        <ul class="w-full flex h-[100%] scrollbar-hide overflow-y-scroll  flex-col gap-5 relative"> 
+        <ul class="w-full h-full scrollbar-hide overflow-y-scroll flex flex-col gap-5 relative"> 
             {#each quickSearchResults as qfunc, i}
                 <li
-                    class="w-full h-10 flex flex-row relative gap-2 items-center"
+                    class="w-full relative h-10 flex flex-row relative gap-2 items-center flex-wrap"
                 >
                     <button 
                         on:click={()=>luaHandler.ExecuteQuickFunction(qfunc, $paramListStore[i]  ,$variablesStore)} 
                         class="sec"
+                        use:tippy={{content: tt.execute, placement: "right"}}
                     >
                             <span class="fas fa-play" ></span>
                     </button>
                     <span 
-                        class="w-fit h-[3rem]  rounded-md variable-input  leading-6 p-1 text-center grid place-items-center"
+                        class="w-fit h-[3rem] relative  rounded-md variable-input  leading-6 p-1 text-center grid place-items-center"
                         use:tippy={{content: `(${qfunc.expectedParams.join(', ')})`, placement: "top"}}
                     >
                         <p class="code-text">{qfunc.name ? qfunc.name : qfunc.code}</p>
@@ -189,7 +191,6 @@
             {/each}
         </ul>
     </div>
-    
 </div>
 
 
