@@ -62,9 +62,9 @@
 
 
 
-<div class="parent-container w-full h-full flex flex-col gap-5 z-0">
-    <div class="variables-container relative w-full min-h-fit max-h-full  flex-grow flex-shrink">
-        <ul class="w-full min-h-fit flex h-full scrollbar-hide overflow-y-scroll  flex-col gap-5 relative"> 
+<div class="parent-container">
+    <div class="variables-container">
+        <ul class="w-full  flex max-h-full scrollbar-hide overflow-y-scroll  flex-col gap-5 relative"> 
             {#each $variablesStore as variable, i}
                 <li class="w-full h-fit flex flex-row relative gap-2 items-center ">
                     <button
@@ -104,14 +104,14 @@
             </button>
         </ul>
     </div>
-    <div class="functions-container h-full relative w-full flex flex-col gap-2 flex-grow flex-shrink">
-        <span class=" relative">
+    <div class="functions-container scrollbar-hide">
+        <span class="relative">
             <input bind:value={quickSearcTerm} class=" relative h-[3rem] rounded-md variable-input leading-6" placeholder="Search for a function" />
         </span>
-        <ul class="w-full h-full scrollbar-hide overflow-y-scroll flex flex-col gap-5 relative"> 
+        <ul class="search-result-container w-full scrollbar-hide overflow-y-scroll flex flex-col gap-2 relative"> 
             {#each quickSearchResults as qfunc, i}
                 <li
-                    class="w-full relative h-10 flex flex-row relative gap-2 items-center flex-wrap"
+                    class="w-full relative max-h-fit min-h-[3rem] flex flex-row relative gap-2 items-center flex-wrap"
                 >
                     <button 
                         on:click={()=>luaHandler.ExecuteQuickFunction(qfunc, $paramListStore[i]  ,$variablesStore)} 
@@ -131,22 +131,20 @@
                         <span
                             role="textbox" 
                             contenteditable="true"
-                            class="min-w-[2rem] h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text text-center p-3"
+                            class=" overflow-hidden relative whitespace-nowrap min-w-[2rem] h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text text-center p-3"
                             type="text"
                             bind:innerHTML={param}
                             on:focusin={handleFocus}
                             on:focusout={handleFocusOut}
                             on:dblclick={()=>{
-                                console.log('dblclick')
                                 if (selectedParam==j && selectedFunc==i){ 
                                     selectedParam=null 
                                     selectedFunc=null;
                                 } else { 
-                                    console.log(j)
                                     selectedParam=j;
                                     selectedFunc=i;
                                 }
-                                }}
+                            }}
                             class:selected-param={(selectedParam==j && selectedFunc==i)}
                         />
                     {/each}
@@ -195,6 +193,43 @@
 
 
 <style>
+
+    .parent-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        padding-bottom: 0.2rem;
+        gap : 0.5rem;
+    }
+
+    /* .parent-container > * {
+        flex: 1 1 ;
+    } */
+
+    .variables-container {
+        position: relative;
+        width: 100%;
+        max-height: 50%;
+    }
+
+    .functions-container {
+        position: relative;
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1 1 100%;
+        overflow-y: scroll;
+    }
+
+    .search-result-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
 
     input, .code-text {
         outline: none;
