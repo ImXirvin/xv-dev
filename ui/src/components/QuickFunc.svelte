@@ -53,6 +53,8 @@
        range.selectNodeContents(el);
         const sel = window.getSelection();
        sel.removeAllRanges();
+       selectedParam=null 
+       selectedFunc=null;
     //    sel.addRange(range);
     }
 
@@ -131,7 +133,7 @@
                         <span
                             role="textbox" 
                             contenteditable="true"
-                            class=" overflow-hidden relative whitespace-nowrap min-w-[2rem] h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text text-center p-3"
+                            class="param-item param-{j} min-w-[2rem] h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text text-center p-3"
                             type="text"
                             bind:innerHTML={param}
                             on:focusin={handleFocus}
@@ -145,6 +147,24 @@
                                     selectedFunc=i;
                                 }
                             }}
+                            on:keypress={(e)=>{
+                                if (e.key == "Enter") {
+                                    e.preventDefault();
+                                    if (!$paramListStore[i]) {
+                                        $paramListStore[i] = [];
+                                    }
+                                    $paramListStore[i].push("");
+                                    $paramListStore[i] = [...$paramListStore[i]];
+                                    $paramListStore = [...$paramListStore];
+                                    //focus on the next param span
+                                    //set timeout to wait for the dom to update
+                                    setTimeout(()=>{
+                                        const nextParam = document.querySelectorAll(`.param-${j+1}`)[i];
+                                        nextParam.focus();
+                                    }, 0)
+                                }
+                            }}
+                            rows="1"
                             class:selected-param={(selectedParam==j && selectedFunc==i)}
                         />
                     {/each}
@@ -194,6 +214,16 @@
 
 <style>
 
+    .param-item {
+        position: relative;
+        max-width: 10rem;
+        white-space: nowrap;
+        overflow: hidden;
+        display:inline;
+        white-space:nowrap;
+    }
+
+
     .parent-container {
         position: relative;
         display: flex;
@@ -203,10 +233,6 @@
         padding-bottom: 0.2rem;
         gap : 0.5rem;
     }
-
-    /* .parent-container > * {
-        flex: 1 1 ;
-    } */
 
     .variables-container {
         position: relative;
