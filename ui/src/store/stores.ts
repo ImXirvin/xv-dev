@@ -29,3 +29,5 @@ quickFunctionsStore.subscribe((value) => {
 })
 
 
+export const paramListStore = writable([]);
+
