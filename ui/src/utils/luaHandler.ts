@@ -57,7 +57,7 @@ function updateDebugOutput(code, eventType, source) {
 
 window.addEventListener("message", (event) => {
     const item = event.data;
-
+    console.log(item)
     if (item.action === "updateOutput") {
         updateOutput(item.data.output, item.data.eventType, item.data.red);
     }
@@ -68,14 +68,14 @@ export class LuaHandler {
 
     
     ExecuteLua(lua: string, eventType: string, source: string) {
-        let code = `(function() ${lua} end)())`
-        updateDebugOutput(code, eventType, source);
+        let code = `(function() return (function() ${lua} end)() end)()`
+        updateDebugOutput(lua, eventType, source);
         SendNUI("ExecuteLua", {code: code, eventType: eventType, source: source});
     }
 
     ExecuteQuickFunction(func: object, params: Array<any>, vars: object) {
         if (params.length == 0) {updateOutput(`${func.code} didn't have any parameters, skipping.`, 'INFO', true); return;}
-        let code = `(function()`;
+        let code = "";
         if (vars.length > 0) {
             for (let i = 0; i < vars.length; i++) {
                 if (vars[i].value.length > 0) {
@@ -87,16 +87,18 @@ export class LuaHandler {
             }
             updateVariables(vars);
         }
+        code = code + 'return '
         code = code + func.code;
         code = code + `(`;
         for (let i = 0; i < params.length; i++) {
             code = code + params[i];
+            console.log(`params[i]`, params[i])
+            console.log(params, 'params')
             if (i < params.length - 1) {
                 code = code + `, `;
             }
         }
         code = code + `)`;
-        code = code + `end)()`;
         updateDebugOutput(code, `Quick: ${func.server ? "Server" : "Client"}`, null);
         this.ExecuteLua(code, (func.server ? "server" : "client"), null);
     }

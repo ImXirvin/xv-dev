@@ -59,7 +59,6 @@ RegisterNetEvent('xv-dev:client:ExecLua', function(code)
         local status, result = pcall(func, '@xv-dev')
         if status then
             output = tostring(result)
-            print(output)
             red = false
         else
             output = "Error: " .. (result or "Unknown")

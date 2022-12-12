@@ -122,7 +122,7 @@
                             contenteditable="true"
                             class="param-item scrollbar-hide param-{j} h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text p-3"
                             type="text"
-                            bind:innerHTML={param}
+                            bind:value={$paramListStore[i][j]}
                             on:focus={(evt) => evt.target.select()}
                             on:focusout={handleFocusOut}
                             on:dblclick={()=>{
