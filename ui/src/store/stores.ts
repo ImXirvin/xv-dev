@@ -21,6 +21,9 @@ codeStore.subscribe((value) => {
 //for variables
 export const variablesStore = writable([]);
 
+export const variablesLogStore = writable([]);
+export const variablesHTMLStore = writable([]);
+
 //for quick functions
 
 export const quickFunctionsStore = writable( JSON.parse(localStorage.getItem('quickFunctions')) || QuickFunctionDefault);
@@ -28,6 +31,9 @@ quickFunctionsStore.subscribe((value) => {
     localStorage.setItem('quickFunctions', JSON.stringify(value));
 })
 
-
 export const paramListStore = writable([]);
+
+export const luaOutputStore = writable([]);
+
+export const debugOutputStore = writable([]);
 

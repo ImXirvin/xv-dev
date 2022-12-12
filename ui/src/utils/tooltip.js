@@ -13,4 +13,9 @@ export const tooltip = {
     execute: "Execute",
     addParam: "Add Parameter",
     removeParam: "Remove Parameter",
+
+    //Output
+    outputTab: "Toggle Output Tab",
+    historyTab: "Toggle History Tab",
+    variablesTab: "Toggle Variables Tab",
 }

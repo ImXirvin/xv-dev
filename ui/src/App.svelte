@@ -23,6 +23,10 @@
      console.log("browser mode disabled");
    }
   });
+
+  ReceiveNUI('DevMenu', (data) => {
+    $visibility = data.show;
+  });
 </script>
 
 <VisibilityProvider>

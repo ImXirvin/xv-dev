@@ -6,6 +6,7 @@
   // @ts-ignore
   import QuickFunc from "./QuickFunc.svelte";
   import { outputMode } from "../store/stores";
+  import Output from "./Output.svelte";
 
 
 	let moving = false;
@@ -226,7 +227,7 @@
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
-	<div bind:this={Window} class="Window flex flex-col" style="left: {WindowLeft}px; top: {WindowTop}px;" use:move use:resize>
+	<div bind:this={Window} class="Window flex flex-col" style="left: {WindowLeft}px; top: {WindowTop}px; min-height: {$outputMode ? '50' : '30'}rem" use:move use:resize>
         <div on:mousedown={onMouseDown}  class="Window-Titlebar flex items-center"><p class="text-center font-bold">{WindowTitle}</p></div>
 		<div class="Window-Content flex flex-row gap-1">
 			<Drawer {options} bind:selectedIndex />
@@ -235,7 +236,7 @@
 		</div>
 		{#if $outputMode}
 		<div class="Window-Output flex items-center relative">
-			
+			<Output />
 		</div>
 		{/if}
 
@@ -257,7 +258,7 @@
 		border-radius: 10px;
 		box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
 		min-width: 50rem;
-		min-height: 50rem;
+
 	}
 
     .Window-Titlebar {
@@ -286,6 +287,7 @@
 		width: 100%;
 		min-height: 20rem;
 		padding: 1rem;
+		padding-top: 0;
 	}
 	
 	

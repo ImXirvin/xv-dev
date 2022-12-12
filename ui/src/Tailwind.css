@@ -67,3 +67,32 @@ overflow: hidden;
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
+
+input, .code-text {
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+
+.scroll-style::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+
+.scroll-style::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+    background-color: var(--color-tertiary);
+    border-radius: 10px;
+}
+
+.scroll-style-x::-webkit-scrollbar {
+    height: 2px;
+}
+
+.scroll-y::-webkit-scrollbar {
+    width: 2px;
+}

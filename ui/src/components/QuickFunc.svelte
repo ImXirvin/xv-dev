@@ -265,10 +265,7 @@
         gap: 0.5rem;
     }
 
-    input, .code-text {
-        outline: none;
-        font-family: 'JetBrains Mono', monospace;
-    }
+
 
     .selected {
         background-color: var(--color-tertiary);
