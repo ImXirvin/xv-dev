@@ -27,6 +27,7 @@ function updateOutput(output, eventType, red) {
 function updateVariables(variables: any) {
     variablesHTMLStore.set([]);
     variablesLogStore.update((n) => {
+        if (variables.length == 0) return n = {...n};
         for (let i = 0; i < variables.length; i++) {
             let varName = variables[i].value.split(" ")[0];
             if (variables[i].global) {
@@ -48,6 +49,7 @@ function updateVariables(variables: any) {
 
 function updateDebugOutput(code, eventType, source) {
     debugOutputStore.update((n) => {
+        console.log(code)
         n.push(`<p>[${getDateTime()}][${eventType}${eventType == "source" ? `: ${source}` : ""}]: ${code}</p>`);
         return n = [...n]
     });
@@ -65,14 +67,15 @@ window.addEventListener("message", (event) => {
 export class LuaHandler {
 
     
-    ExecuteLua(code: string, eventType: string, source: string) {
+    ExecuteLua(lua: string, eventType: string, source: string) {
+        let code = `(function() ${lua} end)())`
         updateDebugOutput(code, eventType, source);
         SendNUI("ExecuteLua", {code: code, eventType: eventType, source: source});
     }
 
     ExecuteQuickFunction(func: object, params: Array<any>, vars: object) {
         if (params.length == 0) {updateOutput(`${func.code} didn't have any parameters, skipping.`, 'INFO', true); return;}
-        let code = ``
+        let code = `(function()`;
         if (vars.length > 0) {
             for (let i = 0; i < vars.length; i++) {
                 if (vars[i].value.length > 0) {
@@ -93,7 +96,8 @@ export class LuaHandler {
             }
         }
         code = code + `)`;
-        updateDebugOutput(`Quick: ${func.server ? "Server" : "Client"}`, code, null);
+        code = code + `end)()`;
+        updateDebugOutput(code, `Quick: ${func.server ? "Server" : "Client"}`, null);
         this.ExecuteLua(code, (func.server ? "server" : "client"), null);
     }
 

@@ -18,15 +18,16 @@ RegisterCommand('dev', function()
     TriggerServerEvent('xv-dev:server:verifyExec')
 end, false)
 
-
+local inMenu = false
 RegisterNetEvent('openDevMenu', function()
+    local bool = not inMenu
     SendNUIMessage({
         action = "DevMenu",
         data = {
-            show = true,
+            show = bool,
         }
     })
-    SetNuiFocus(true, true)
+    SetNuiFocus(bool , bool)
 end)
 
 RegisterNUICallback('hideUI', function(data, cb)
@@ -44,7 +45,7 @@ RegisterNetEvent('xv-dev:client:UpdateOutput', function(output, eventType, red)
         action = "updateOutput",
         data = {
             output = output,
-            eventType = eventType
+            eventType = eventType,
             red = red,
         }
     })
@@ -58,6 +59,7 @@ RegisterNetEvent('xv-dev:client:ExecLua', function(code)
         local status, result = pcall(func, '@xv-dev')
         if status then
             output = tostring(result)
+            print(output)
             red = false
         else
             output = "Error: " .. (result or "Unknown")

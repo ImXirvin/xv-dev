@@ -42,19 +42,19 @@
         </button>
     </span>
     {#if (selected == 'output')}
-    <div class="relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
+    <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
         {#each $luaOutputStore as output, i}
             {@html output}
         {/each}
     </div>
     {:else if (selected == 'history')}
-    <div class="relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
+    <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
         {#each $debugOutputStore as debug, i}
             {@html debug}
         {/each}
     </div>
     {:else if (selected == 'variables')}
-    <div class="relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
+    <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
         {#each $variablesLogStore as varLog, i}
             {@html varLog}
         {/each}

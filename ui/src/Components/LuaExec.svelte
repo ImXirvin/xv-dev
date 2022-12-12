@@ -48,18 +48,6 @@
 <div class="w-full h-full flex flex-col gap-5 z-0">
   <div class="w-full relative h-full">
     <AceEditor
-      on:selectionChange={(obj) => console.log(obj.detail)}
-      on:paste={(obj) => console.log(obj.detail)}
-      on:input={(obj) => console.log(obj.detail)}
-      on:focus={() => console.log('focus')}
-      on:documentChange={(obj) => console.log(`document change : ${obj.detail}`)}
-      on:cut={() => console.log('cut')}
-      on:cursorChange={() => console.log('cursor change')}
-      on:copy={() => console.log('copy')}
-      on:init={(editor) => console.log(editor.detail)}
-      on:commandKey={(obj) => console.log(obj.detail)}
-      on:changeMode={(obj) => console.log(`change mode : ${obj.detail}`)}
-      on:blur={() => console.log('blur')}
       width='100%'
       height='100%'
       lang="lua"
