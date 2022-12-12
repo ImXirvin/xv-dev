@@ -38,21 +38,8 @@
         }
     }
 
-    function handleFocus(e) {
-        const el = e.target
-        const range = document.createRange();
-       range.selectNodeContents(el);
-        const sel = window.getSelection();
-       sel.removeAllRanges();
-       sel.addRange(range);
-    }
 
-    function handleFocusOut(e) {
-        const el = e.target
-        const range = document.createRange();
-       range.selectNodeContents(el);
-        const sel = window.getSelection();
-       sel.removeAllRanges();
+    function handleFocusOut() {
        selectedParam=null 
        selectedFunc=null;
     //    sel.addRange(range);
@@ -113,7 +100,7 @@
         <ul class="search-result-container w-full scrollbar-hide overflow-y-scroll flex flex-col gap-2 relative"> 
             {#each quickSearchResults as qfunc, i}
                 <li
-                    class="w-full relative max-h-fit min-h-[3rem] flex flex-row relative gap-2 items-center flex-wrap"
+                    class="quick-func-item"
                 >
                     <button 
                         on:click={()=>luaHandler.ExecuteQuickFunction(qfunc, $paramListStore[i]  ,$variablesStore)} 
@@ -130,13 +117,13 @@
                     </span>
                     {#if $paramListStore[i]}
                     {#each $paramListStore[i] as param, j}
-                        <span
+                        <input
                             role="textbox" 
                             contenteditable="true"
-                            class="param-item param-{j} min-w-[2rem] h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text text-center p-3"
+                            class="param-item scrollbar-hide param-{j} h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text p-3"
                             type="text"
                             bind:innerHTML={param}
-                            on:focusin={handleFocus}
+                            on:focus={(evt) => evt.target.select()}
                             on:focusout={handleFocusOut}
                             on:dblclick={()=>{
                                 if (selectedParam==j && selectedFunc==i){ 
@@ -156,12 +143,20 @@
                                     $paramListStore[i].push("");
                                     $paramListStore[i] = [...$paramListStore[i]];
                                     $paramListStore = [...$paramListStore];
-                                    //focus on the next param span
-                                    //set timeout to wait for the dom to update
                                     setTimeout(()=>{
                                         const nextParam = document.querySelectorAll(`.param-${j+1}`)[i];
-                                        nextParam.focus();
+                                        //select the text inside the input
+                                        // const range = document.createRange();
+                                        // const sel = window.getSelection();
+                                        // range.setStart(nextParam, 0);
+                                        // range.collapse(true);
+                                        // sel.removeAllRanges();
+                                        // sel.addRange(range);
+                                        // nextParam.focus();
                                     }, 0)
+
+                                    //focus on the next param input
+
                                 }
                             }}
                             rows="1"
@@ -216,7 +211,6 @@
 
     .param-item {
         position: relative;
-        max-width: 10rem;
         white-space: nowrap;
         overflow: hidden;
         display:inline;
@@ -234,6 +228,20 @@
         gap : 0.5rem;
     }
 
+    .quick-func-item {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .quick-func-item > .param-item {
+        flex: 1 1 10rem;
+        overflow-x: scroll;
+    }
+
     .variables-container {
         position: relative;
         width: 100%;
@@ -243,7 +251,7 @@
     .functions-container {
         position: relative;
         display: flex;
-        width: 100%;
+        max-width: 100%;
         flex-direction: column;
         gap: 0.5rem;
         flex: 1 1 100%;

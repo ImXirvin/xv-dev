@@ -250,7 +250,7 @@
 		position: absolute;
 		border-radius: 10px;
 		box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
-		min-width: fit-content;
+		min-width: 50rem;
 		min-height: 30rem;
 	}
 
