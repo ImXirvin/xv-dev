@@ -39,29 +39,34 @@ RegisterNUICallback('hideUI', function(data, cb)
     SetNuiFocus(false, false)
 end)
 
-RegisterNetEvent('xv-dev:client:UpdateOutput', function(output, eventType)
+RegisterNetEvent('xv-dev:client:UpdateOutput', function(output, eventType, red)
     SendNUIMessage({
         action = "updateOutput",
         data = {
             output = output,
             eventType = eventType
+            red = red,
         }
     })
 end)
 
 RegisterNetEvent('xv-dev:client:ExecLua', function(code)
     local func, err = load('return ' .. code, '@xv-dev')
+    local red = false
+    local output = ""
     if func then
         local status, result = pcall(func, '@xv-dev')
         if status then
             output = tostring(result)
+            red = false
         else
             output = "Error: " .. (result or "Unknown")
         end
     else
         output = "Error: " .. err
+        red = true
     end
-    TriggerEvent('xv-dev:client:UpdateOutput', output, 'client')
+    TriggerEvent('xv-dev:client:UpdateOutput', output, 'client', red)
 end)
 
 RegisterNUICallback('ExecuteLua', function(data, cb)

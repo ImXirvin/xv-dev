@@ -86,17 +86,21 @@ RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
         print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
         return
     end
-    
+    local red = false
+    local output = ""
     local func, err = load(code)
     if func then
         local status, result = pcall(func)
         if status then
             output = "Executed"
+            red = false
         else
             output = "Error: " .. (result or "Unknown")
+            red = true
         end
     else
         output = "Error: " .. err
+        red = true
     end
-    TriggerClientEvent('xv-dev:client:UpdateOutput', src, output, 'server')
+    TriggerClientEvent('xv-dev:client:UpdateOutput', src, output, 'server', red)
 end)
