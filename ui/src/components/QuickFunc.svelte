@@ -103,7 +103,7 @@
                     class="quick-func-item"
                 >
                     <button 
-                        on:click={()=>luaHandler.ExecuteQuickFunction(qfunc, $paramListStore[i]  ,$variablesStore)} 
+                        on:click={()=>luaHandler.ExecuteQuickFunction(qfunc, $paramListStore[i], $variablesStore)} 
                         class="sec"
                         use:tippy={{content: tt.execute, placement: "right"}}
                     >

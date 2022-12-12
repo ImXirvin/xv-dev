@@ -2,7 +2,7 @@
   import {tippy} from 'svelte-tippy';
   import 'tippy.js/dist/tippy.css';
   import { tooltip } from "../utils/tooltip";
-  import { outputMode, debugMode } from "../store/stores";
+  import { outputMode } from "../store/stores";
 
   const tt = tooltip;
   export let options =  [];
@@ -32,11 +32,11 @@
               <i class="fas fa-right-from-bracket"></i>
             </p>
           </li>
-          <li use:tippy={{content: `Debug`, placement: "right"}} class="nav-item self-end">
+          <!-- <li use:tippy={{content: `Debug`, placement: "right"}} class="nav-item self-end">
             <p class:selected={$debugMode} class="nav-link" on:click={() =>$debugMode=!$debugMode}>
               <i class="fas fa-bug"></i>
             </p>
-          </li>
+          </li> -->
         </div>
     </ul>
 </nav>

@@ -5,6 +5,7 @@
   import LuaExec from "./LuaExec.svelte";
   // @ts-ignore
   import QuickFunc from "./QuickFunc.svelte";
+  import { outputMode } from "../store/stores";
 
 
 	let moving = false;
@@ -230,8 +231,13 @@
 		<div class="Window-Content flex flex-row gap-1">
 			<Drawer {options} bind:selectedIndex />
 			<!-- <LuaExec /> -->
-			<svelte:component this={options[selectedIndex].component} />
+				<svelte:component this={options[selectedIndex].component} />
 		</div>
+		{#if $outputMode}
+		<div class="Window-Output flex items-center relative">
+			
+		</div>
+		{/if}
 
 	</div>
 
@@ -251,7 +257,7 @@
 		border-radius: 10px;
 		box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
 		min-width: 50rem;
-		min-height: 30rem;
+		min-height: 50rem;
 	}
 
     .Window-Titlebar {
@@ -274,6 +280,12 @@
 		padding: 1rem;
 		min-height: 25rem;
 		/* overflow: hidden; */
+	}
+
+	.Window-Output {
+		width: 100%;
+		min-height: 20rem;
+		padding: 1rem;
 	}
 	
 	
