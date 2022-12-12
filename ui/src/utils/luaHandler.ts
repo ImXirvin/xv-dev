@@ -1,5 +1,5 @@
 import { SendNUI } from "./SendNUI";
-import { debugOutputStore, variablesLogStore, luaOutputStore, variablesHTMLStore } from "../store/stores";
+import { debugOutputStore, variablesLogStore, variablesStore, luaOutputStore, variablesHTMLStore } from "../store/stores";
 
 
 function getDateTime() {
@@ -23,34 +23,42 @@ function updateOutput(output, eventType, red) {
     });
     // scrollToBottom(luaOutputElement);
 }
-
-function updateVariables(variables: any) {
-    variablesHTMLStore.set([]);
+function updateVariables(variables) {
+    // variablesHTMLStore.set([]);
     variablesLogStore.update((n) => {
-        if (variables.length == 0) return n = {...n};
+        if (variables.length == 0) return n = [...n];
         for (let i = 0; i < variables.length; i++) {
             let varName = variables[i].value.split(" ")[0];
             if (variables[i].global) {
-                if (n[varName]) {
-                    n[varName] = variables[i].value;
-                } else {
-                    n[varName] = variables[i].value;
+                // if (n) {
+                //     n = n.filter((item) => {item.name != varName});
+                //     n = [...n];
+                // }
+                for (let i = 0; i < n.length; i++) {
+                    if (n[i].name == varName) {
+                        n.splice(i, 1);
+                    }
                 }
-                variablesHTMLStore.update((m) => {
-                    let newEntry = `<p class="text-white">${variables[i].value}</p>`;
-                    m.push(newEntry);
-                    return m = {...m}
-                });
+                // n.push({`${varName}` : `<p class="text-white"> ${variables[i].value} </p>`});
+                n.push({
+                    "name": varName,
+                    "html": `<p class="text-white"> ${variables[i].value} </p>`});
+                // n = [...n];
             }
         }
-        return n = {...n}
+        n = [...n];
+        console.log('updateVarriable', n)
+        return n
     });
 }
 
 function updateDebugOutput(code, eventType, source) {
     debugOutputStore.update((n) => {
-        console.log(code)
-        n.push(`<p>[${getDateTime()}][${eventType}${eventType == "source" ? `: ${source}` : ""}]: ${code}</p>`);
+        // console.log(code)
+        let htmlString = `<p>[${getDateTime()}][${eventType}${eventType == "source" ? `: ${source}` : ""}]: `;
+        htmlString = htmlString + code
+        htmlString = htmlString + ` </p>`;
+        n.push(htmlString);
         return n = [...n]
     });
 }
@@ -65,7 +73,6 @@ window.addEventListener("message", (event) => {
 
 
 export class LuaHandler {
-
     
     ExecuteLua(lua: string, eventType: string, source: string) {
         let code = `(function() return (function() ${lua} end)() end)()`
@@ -85,15 +92,12 @@ export class LuaHandler {
                     }
                 }
             }
-            updateVariables(vars);
         }
         code = code + 'return '
         code = code + func.code;
         code = code + `(`;
         for (let i = 0; i < params.length; i++) {
             code = code + params[i];
-            console.log(`params[i]`, params[i])
-            console.log(params, 'params')
             if (i < params.length - 1) {
                 code = code + `, `;
             }
@@ -101,6 +105,6 @@ export class LuaHandler {
         code = code + `)`;
         updateDebugOutput(code, `Quick: ${func.server ? "Server" : "Client"}`, null);
         this.ExecuteLua(code, (func.server ? "server" : "client"), null);
+        updateVariables(vars)
     }
-
 }

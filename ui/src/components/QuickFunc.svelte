@@ -59,17 +59,17 @@
                     <button
                         class:selected={variable.global}
                         class="sec"
-                        on:click={()=>variable.global=!variable.global}
-                        use:tippy={{content: `Current: ${variable.global ? 'Global' : 'Local'}`, placement: "right"}}
+                        on:click={()=>$variablesStore[i].global=!$variablesStore[i].global}
+                        use:tippy={{content: `Current: ${$variablesStore[i].global ? 'Global' : 'Local'}`, placement: "right"}}
                     >
                         <i class="fas fa-globe"></i>
                     </button>
                     <textarea
                         class="w-full min-h-[3rem] rounded-md variable-input "
                         type="text"
-                        bind:value={variable.value}
+                        bind:value={$variablesStore[i].value}
                         rows="1"
-                        placeholder="Declare a variable (Current Scope: {variable.global ? 'Global' : 'Local'})"
+                        placeholder="Declare a variable (Current Scope: {$variablesStore[i].global ? 'Global' : 'Local'})"
                     />
                     <button
                         class="sec"
@@ -182,7 +182,6 @@
                     <button 
                         on:click={() => {
                             if ($paramListStore[i] && selectedParam != null) {
-                                console.log($paramListStore[i][selectedParam])
                                 $paramListStore[i].splice(selectedParam, 1);
                                 $paramListStore = [...$paramListStore];
                                 selectedParam = null;

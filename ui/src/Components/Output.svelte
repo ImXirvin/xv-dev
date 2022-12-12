@@ -43,21 +43,33 @@
     </span>
     {#if (selected == 'output')}
     <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
-        {#each $luaOutputStore as output, i}
-            {@html output}
-        {/each}
+        {#if ($luaOutputStore.length == 0)}
+            <p class="text-center">No output logged</p>
+        {:else}
+            {#each $luaOutputStore as output, i}
+                {@html output}
+            {/each}
+        {/if}
     </div>
     {:else if (selected == 'history')}
     <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
-        {#each $debugOutputStore as debug, i}
-            {@html debug}
-        {/each}
+        {#if ($debugOutputStore.length == 0)}
+            <p class="text-center">No history logged</p>
+        {:else}
+            {#each $debugOutputStore as debug, i}
+                {@html debug}
+            {/each}
+        {/if}
     </div>
     {:else if (selected == 'variables')}
     <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
-        {#each $variablesLogStore as varLog, i}
-            {@html varLog}
-        {/each}
+        {#if ($variablesLogStore.length == 0)}
+            <p class="text-center">No variables logged</p>
+        {:else}
+            {#each $variablesLogStore as varLog, i}
+                {@html varLog.html}
+            {/each}
+        {/if}
     </div>
     {/if}
 
