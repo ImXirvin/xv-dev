@@ -3,11 +3,24 @@
     import 'tippy.js/dist/tippy.css';
     import { tooltip } from "../utils/tooltip";
     import { luaOutputStore, debugOutputStore, variablesLogStore } from "../store/stores";
+  import { afterUpdate, onMount } from 'svelte';
 
 
   const tt = tooltip;
 
     let selected = "output"
+
+    let currentElement = null;
+    const scrollToBottom = async (node) => {
+        node.scroll({ top: (node.scrollHeight), behavior: 'auto' });
+    }; 
+
+
+    afterUpdate(() => {
+        if (currentElement) {
+            scrollToBottom(currentElement);
+        }
+    });
 
 </script>
 
@@ -42,7 +55,7 @@
         </button>
     </span>
     {#if (selected == 'output')}
-    <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
+    <div bind:this={currentElement} class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
         {#if ($luaOutputStore.length == 0)}
             <p class="text-center">No output logged</p>
         {:else}
@@ -52,7 +65,7 @@
         {/if}
     </div>
     {:else if (selected == 'history')}
-    <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
+    <div bind:this={currentElement} class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
         {#if ($debugOutputStore.length == 0)}
             <p class="text-center">No history logged</p>
         {:else}
@@ -62,7 +75,7 @@
         {/if}
     </div>
     {:else if (selected == 'variables')}
-    <div class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
+    <div bind:this={currentElement} class="text-white relative div-box min-h-[15rem] h-[15rem] w-full p-1 overflow-y-scroll scroll-style scroll-y code-text rounded-md" >
         {#if ($variablesLogStore.length == 0)}
             <p class="text-center">No variables logged</p>
         {:else}
