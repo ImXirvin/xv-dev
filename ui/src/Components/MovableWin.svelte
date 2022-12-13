@@ -10,10 +10,10 @@
 
 
 	let moving = false;
-	let WindowLeft;
-	let WindowTop;
-	let WindowWidth;
-	let WindowHeight;
+	export let WindowLeft;
+	export let WindowTop;
+	export let WindowWidth;
+	export let WindowHeight;
 	let Window;
 
 
@@ -163,13 +163,24 @@
 	}
 
 	let initial = false
+	let restored = false
 	$: if (Window && initial == false) {
 		initial = true
-		Window.getBoundingClientRect()
-		WindowHeight = Window.getBoundingClientRect().height
-		WindowWidth = Window.getBoundingClientRect().width
-		WindowLeft = (window.innerWidth - WindowWidth) / 2;
-		WindowTop = (window.innerHeight - WindowHeight) / 2;
+		if (WindowHeight != null) Window.style.height = WindowHeight + 'px'
+		if (WindowWidth != null) Window.style.width = WindowWidth + 'px'
+		if (WindowLeft != null) Window.style.left = WindowLeft + 'px'
+		if (WindowTop != null) Window.style.top = WindowTop + 'px'
+		if (WindowHeight != null && WindowWidth != null && WindowLeft != null && WindowTop != null) restored = true
+
+		if (restored == false) {
+
+			Window.getBoundingClientRect()
+			WindowHeight = Window.getBoundingClientRect().height
+			WindowWidth = Window.getBoundingClientRect().width
+			WindowLeft = (window.innerWidth - WindowWidth) / 2;
+			WindowTop = (window.innerHeight - WindowHeight) / 2;
+		}
+
 	}
 
 
@@ -177,8 +188,8 @@
 	$: if (WindowLeft < 0) WindowLeft = 0 //prevent window from going off the left of the screen
 	$: if (WindowTop > window.innerHeight - WindowHeight) WindowTop = window.innerHeight - WindowHeight //prevent window from going off the bottom of the screen
 	$: if (WindowLeft > window.innerWidth - WindowWidth) WindowLeft = window.innerWidth - WindowWidth  //prevent window from going off the right of the screen
-	$: if (WindowHeight < 100) WindowHeight = 100 //prevent window from getting too small
-	$: if (WindowWidth < 100) WindowWidth = 100 //prevent window from getting too small
+	// $: if (WindowHeight < 100) WindowHeight = 100 //prevent window from getting too small
+	// $: if (WindowWidth < 100) WindowWidth = 100 //prevent window from getting too small
 
 
 	function onMouseDown() {
