@@ -11,13 +11,15 @@ function getDateTime() {
     return time;
 }
 
+  
+
 function updateOutput(output, eventType, red) {
     //add a string to luaOutputStore array
     luaOutputStore.update((n) => {
         if (red) {
-            n.push(`<p class="text-[red]">[${getDateTime()}][${eventType}]: ${output}</p>`);
+            n.push(`<pre class="text-[red]">[${getDateTime()}][${eventType}]: ${output}</pre>`);
         } else {
-            n.push(`<p>[${getDateTime()}][${eventType}]: ${output}</p>`);
+            n.push(`<pre>[${getDateTime()}][${eventType}]: ${output}</pre>`);
         }
         return n = [...n]
     });
@@ -42,7 +44,7 @@ function updateVariables(variables) {
                 // n.push({`${varName}` : `<p class="text-white"> ${variables[i].value} </p>`});
                 n.push({
                     "name": varName,
-                    "html": `<p class="text-white"> ${variables[i].value} </p>`});
+                    "html": `<pre class="text-white"> ${variables[i].value} </pre>`});
                 // n = [...n];
             }
         }
@@ -55,9 +57,9 @@ function updateVariables(variables) {
 function updateDebugOutput(code, eventType, source) {
     debugOutputStore.update((n) => {
         // console.log(code)
-        let htmlString = `<p>[${getDateTime()}][${eventType}${eventType == "source" ? `: ${source}` : ""}]: `;
+        let htmlString = `<pre>[${getDateTime()}][${eventType}${eventType == "source" ? `: ${source}` : ""}]: `;
         htmlString = htmlString + code
-        htmlString = htmlString + ` </p>`;
+        htmlString = htmlString + ` </pre>`;
         n.push(htmlString);
         return n = [...n]
     });

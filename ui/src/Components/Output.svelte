@@ -21,7 +21,6 @@
             scrollToBottom(currentElement);
         }
     });
-
 </script>
 
 
@@ -93,6 +92,7 @@
     .div-box {
         background-color: var(--color-primary);
         user-select: text;
+        word-break: break-all;
     }
 
 </style>
