@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+:root {
+    font-size: 62.5%;
+    --color-primary: rgba(0, 0, 0, 0.9);
+    --color-secondary: rgb(34, 34, 34);
+    --color-tertiary: white;
+}
+
+html, body {
+height: 100vh;
+width: 100vw;
+font-size: 1.6rem;
+overflow: hidden;
+}

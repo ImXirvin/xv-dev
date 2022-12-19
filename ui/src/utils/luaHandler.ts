@@ -1,9 +1,5 @@
-import { SendNUI } from "./SendNui";
-import { luaOutput, debug, execHistory, activeGlobalVariables } from "../store/stores";
-
-let isDebug = false;
-debug.subscribe((n) => (isDebug = n));
-
+import { SendNUI } from "./SendNUI";
+import { debugOutputStore, variablesLogStore, variablesStore, luaOutputStore, variablesHTMLStore } from "../store/stores";
 
 
 function getDateTime() {
@@ -15,72 +11,100 @@ function getDateTime() {
     return time;
 }
 
-function updateOutput(output, eventType) {
-    luaOutput.update((n) => n + `[${getDateTime()}][${eventType}]: ${output}\n`);
+function updateOutput(output, eventType, red) {
+    //add a string to luaOutputStore array
+    luaOutputStore.update((n) => {
+        if (red) {
+            n.push(`<p class="text-[red]">[${getDateTime()}][${eventType}]: ${output}</p>`);
+        } else {
+            n.push(`<p>[${getDateTime()}][${eventType}]: ${output}</p>`);
+        }
+        return n = [...n]
+    });
     // scrollToBottom(luaOutputElement);
 }
-
-export function execLuaRaw(code: string, eventType: string) {
-    let debugString = `Raw Lua: ${code}`;
-    if (isDebug) {
-        updateOutput(debugString, 'DEBUG');
-    }
-    execHistory.update((n) => n + `[${getDateTime()}][${eventType}]: ${code}\n`);
-    SendNUI("ExecuteLua", {code: code, eventType: eventType, });
+function updateVariables(variables) {
+    // variablesHTMLStore.set([]);
+    variablesLogStore.update((n) => {
+        if (variables.length == 0) return n = [...n];
+        for (let i = 0; i < variables.length; i++) {
+            let varName = variables[i].value.split(" ")[0];
+            if (variables[i].global) {
+                // if (n) {
+                //     n = n.filter((item) => {item.name != varName});
+                //     n = [...n];
+                // }
+                for (let i = 0; i < n.length; i++) {
+                    if (n[i].name == varName) {
+                        n.splice(i, 1);
+                    }
+                }
+                // n.push({`${varName}` : `<p class="text-white"> ${variables[i].value} </p>`});
+                n.push({
+                    "name": varName,
+                    "html": `<p class="text-white"> ${variables[i].value} </p>`});
+                // n = [...n];
+            }
+        }
+        n = [...n];
+        // console.log('updateVarriable', n)
+        return n
+    });
 }
 
-export function execQuickFunc(funcObject: any, variables: any) {
-    if (funcObject.params.length == 0) {updateOutput(`${funcObject.code} didn't have any parameters, skipping.`, 'INFO'); return;};
-    let code = ``
-    if (variables.length > 0) {
-        for (let i = 0; i < variables.length; i++) {
-            if (variables[i].value.length > 0) {
-                if (variables[i].value.length > 0) {
-                    let scope = variables[i].global ? `` : `local`;
-                    code += `${scope} ${variables[i].value}\n`
-                }
-            }
-        }
-        updateVariables(variables);
-    }
-
-    code = code + funcObject.code;
-    if (funcObject.params.length > 0) {
-        code = code + `(`;
-        for (let i = 0; i < funcObject.params.length; i++) {
-            code = code + funcObject.params[i];
-            if (i < funcObject.params.length - 1) {
-                code = code + `, `;
-            }
-        }
-        code = code + `)`;
-    }
-    let eventType: string = `client`;
-    if (funcObject.server) {
-        eventType = `server`;
-    }
-    
-    execLuaRaw(code, eventType);
+function updateDebugOutput(code, eventType, source) {
+    debugOutputStore.update((n) => {
+        // console.log(code)
+        let htmlString = `<p>[${getDateTime()}][${eventType}${eventType == "source" ? `: ${source}` : ""}]: `;
+        htmlString = htmlString + code
+        htmlString = htmlString + ` </p>`;
+        n.push(htmlString);
+        return n = [...n]
+    });
 }
 
 window.addEventListener("message", (event) => {
     const item = event.data;
-
+    // console.log(item)
     if (item.action === "updateOutput") {
-        updateOutput(item.data.output, item.data.eventType);
+        updateOutput(item.data.output, item.data.eventType, item.data.red);
     }
 });
 
 
-function updateVariables(variables: any) {
-    activeGlobalVariables.update((n) => {
-        for (let i = 0; i < variables.length; i++) {
-            if (variables[i].global) {
-                if (!n.includes(variables[i].value)) {
-                    n.push(variables[i].value);
+export class LuaHandler {
+    
+    ExecuteLua(lua: string, eventType: string, source: string) {
+        let code = `(function() return (function() ${lua} end)() end)()`
+        updateDebugOutput(lua, eventType, source);
+        SendNUI("ExecuteLua", {code: code, eventType: eventType, source: source});
+    }
+
+    ExecuteQuickFunction(func: object, params: Array<any>, vars: object) {
+        if (params.length == 0) {updateOutput(`${func.code} didn't have any parameters, skipping.`, 'INFO', true); return;}
+        let code = "";
+        if (vars.length > 0) {
+            for (let i = 0; i < vars.length; i++) {
+                if (vars[i].value.length > 0) {
+                    if (vars[i].value.length > 0) {
+                        let scope = vars[i].global ? `` : `local`;
+                        code += `${scope} ${vars[i].value}\n`
+                    }
                 }
             }
         }
-        return n;
-    });
+        code = code + 'return '
+        code = code + func.code;
+        code = code + `(`;
+        for (let i = 0; i < params.length; i++) {
+            code = code + params[i];
+            if (i < params.length - 1) {
+                code = code + `, `;
+            }
+        }
+        code = code + `)`;
+        updateDebugOutput(code, `Quick: ${func.server ? "Server" : "Client"}`, null);
+        this.ExecuteLua(code, (func.server ? "server" : "client"), null);
+        updateVariables(vars)
+    }
 }

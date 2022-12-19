@@ -1,45 +1,48 @@
-<script lang="ts">
-  import Console from "./Console.svelte";
-  import { execQuickFunc } from "../utils/luaHandler";
-  import { tooltip } from "../utils/tooltip";
-  import { activeVariables, quickFunctions } from "../store/stores";
+<script>
+    import { variablesStore, quickFunctionsStore, paramListStore } from "../store/stores";
+    import {tippy} from 'svelte-tippy';
+    import 'tippy.js/dist/tippy.css';
+    import { tooltip } from "../utils/tooltip";
+    import { LuaHandler } from "../utils/luaHandler";
+    
+    const luaHandler = new LuaHandler();
 
-    let selectedParam: number; // index of selected param
+    const tt = tooltip;
 
-    function handleTab(e) {
-        if (e.key === "Tab") {
-            e.preventDefault();
-            const start = e.target.selectionStart;
-            const end = e.target.selectionEnd;
-            e.target.value = e.target.value.substring(0, start) + "\t" + e.target.value.substring(end);
-            e.target.selectionStart = e.target.selectionEnd = start + 1;
-        }
-    }
+    let quickSearcTerm = "";
+    let quickSearchResults = [];
+    let selectedParam = null;
+    let selectedFunc = null;
 
     function addVar() {
-        $activeVariables.push({
+        let varStore = $variablesStore;
+        varStore.push({
             value: "",
             global: false,
-        })
-        $activeVariables = [...$activeVariables]
+        });
+        $variablesStore = [...varStore];
     }
 
 
-    let searchTerm = "";
-    let searchResults: any = [];
-        
     $: {
-        if (searchTerm.length > 0) {
-            searchResults = $quickFunctions.filter((func) => {
+        if (quickSearcTerm.length > 0) {
+            quickSearchResults = $quickFunctionsStore.filter((func) => {
                 if (func.name) {
-                    return func.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    return func.name.toLowerCase().includes(quickSearcTerm.toLowerCase())
                 }
-                return func.code.toLowerCase().includes(searchTerm.toLowerCase())
+                return func.code.toLowerCase().includes(quickSearcTerm.toLowerCase())
             })
             // console.log(searchResults)
         } else {
-            searchResults = $quickFunctions;
+            quickSearchResults = $quickFunctionsStore;
         }
+    }
+
+
+    function handleFocusOut() {
+       selectedParam=null 
+       selectedFunc=null;
+    //    sel.addRange(range);
     }
 
 
@@ -47,160 +50,240 @@
 
 
 
-<div class="w-[100%] h-full self-end relative text-center gap-0 flex flex-col overflow-y-scroll ">
-    <div class="w-[95%] h-[fit] variables-container relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
-        <div class="w-full max-h-[20rem] variables-container relative overflow-y-scroll  flex flex-col gap-1 ">
-            {#each $activeVariables as varCon, i}
-            <span class="flex flex-row gap-1 relative">
-                <div class:toggle-on={varCon.global} on:click={()=>{varCon.global=!varCon.global}} class="selection grid place-items-center w-auto h-auto "><i class="fa-solid fa-earth-americas"></i></div>
-                <textarea on:keydown={handleTab}  bind:value={varCon.value} rows="1" class="w-full h-full leading-6 text-[1.5rem] p-5" placeholder="Create variables ({varCon.global ? 'GLOBAL':'LOCAL'})"></textarea>
-                <div  on:click={()=>{if ($activeVariables.length > 1){$activeVariables.splice(i,1);$activeVariables = [...$activeVariables] }}} class="selection grid place-items-center w-auto h-auto fa-solid fa-trash"></div>
-            </span>
+
+<div class="parent-container">
+    <div class="variables-container">
+        <ul class="w-full  flex max-h-full scrollbar-hide overflow-y-scroll  flex-col gap-5 relative"> 
+            {#each $variablesStore as variable, i}
+                <li class="w-full h-fit flex flex-row relative gap-2 items-center ">
+                    <button
+                        class:selected={variable.global}
+                        class="sec"
+                        on:click={()=>$variablesStore[i].global=!$variablesStore[i].global}
+                        use:tippy={{content: `Current: ${$variablesStore[i].global ? 'Global' : 'Local'}`, placement: "right"}}
+                    >
+                        <i class="fas fa-globe"></i>
+                    </button>
+                    <textarea
+                        class="w-full min-h-[3rem] rounded-md variable-input "
+                        type="text"
+                        bind:value={$variablesStore[i].value}
+                        rows="1"
+                        placeholder="Declare a variable (Current Scope: {$variablesStore[i].global ? 'Global' : 'Local'})"
+                    />
+                    <button
+                        class="sec"
+                        on:click={() => {
+                            $variablesStore.splice(i, 1);
+                            $variablesStore = [...$variablesStore];
+                        }}
+                        
+                        use:tippy={{content: tt.removeVar, placement: "left"}}
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                </li>
             {/each}
-        </div>
-        <button class="add-button relative w-[fit]" on:click={addVar}><i class="fa-solid fa-plus"></i></button>
+            <button
+                class="sec"
+                on:click={addVar}
+                use:tippy={{content: tt.addVar, placement: "bottom"}}
+            >
+                <i class="fas fa-plus"></i>
+            </button>
+        </ul>
     </div>
-    <div class="w-[95%]  relative rounded-[1rem] mx-5 flex flex-col gap-1 ">
-        <span class="text mb-3 mt-5 text-start">FUNCTIONS
-            <input bind:value={searchTerm} class="search-input" placeholder="Search for a function" />
+    <div class="functions-container scrollbar-hide">
+        <span class="relative">
+            <input bind:value={quickSearcTerm} class=" relative h-[3rem] rounded-md variable-input leading-6" placeholder="Search for a function" />
         </span>
-        <div class="w-full max-h-[38rem] relative overflow-y-scroll flex flex-col gap-1 ">
-            {#each searchResults as func}
-            <!-- {#each $quickFunctions as func, i} -->
-            <div class="flex flex-wrap w-full gap-1 h-fit relative overflow-visible  ">
-                <button on:click={()=>execQuickFunc(func, $activeVariables)} class="button exec-button grid place-items-center">
-                    <span class="fas fa-play p-3 w-auto h-auto" ></span>
-                </button>
-                {#if func.expectedParams}
-                <p class=" code-text w-fit h-fit relative leading-6 text-[1.5rem] p-5" use:tooltip title={`(${func.expectedParams})`}>{func.name || func.code}</p>
-                {:else}
-                <p class=" code-text w-fit h-fit relative leading-6 text-[1.5rem] p-5" >{func.name || func.code}</p>
-                {/if}
-                {#each func.params as param, v}
-                    <span role="textbox" contenteditable="true" on:focusout={()=>selectedParam=null} on:dblclick={()=>{if (selectedParam==v){ selectedParam=null } else { selectedParam=v;}}} class:toggle-on={(selectedParam==v)} bind:innerHTML={param} rows="1" class="param-item relative max-w-fit  h-fit leading-6 text-[1.5rem] p-5" ></span>
-                {/each}
-                <div  on:click={()=>{func.params.push(""); func.params = [...func.params]}} class="button grid place-items-center"><i class="fa-solid fa-plus p-3 w-auto h-auto"></i></div>
-                
-                {#if func.params.length > 0}
-                <div   on:click={()=>{if (func.params.length > 0){func.params.splice(selectedParam,1);func.params = [...func.params] }}}  class="button grid place-items-center" ><i class="fa-solid fa-trash p-3 w-auto h-auto"></i></div>
-                {/if}
-            </div>
+        <ul class="search-result-container w-full scrollbar-hide overflow-y-scroll flex flex-col gap-2 relative"> 
+            {#each quickSearchResults as qfunc, i}
+                <li
+                    class="quick-func-item"
+                >
+                    <button 
+                        on:click={()=>luaHandler.ExecuteQuickFunction(qfunc, $paramListStore[i], $variablesStore)} 
+                        class="sec"
+                        use:tippy={{content: tt.execute, placement: "right"}}
+                    >
+                            <span class="fas fa-play" ></span>
+                    </button>
+                    <span 
+                        class="w-fit h-[3rem] relative  rounded-md variable-input  leading-6 p-1 text-center grid place-items-center"
+                        use:tippy={{content: `(${qfunc.expectedParams.join(', ')})`, placement: "top"}}
+                    >
+                        <p class="code-text">{qfunc.name ? qfunc.name : qfunc.code}</p>
+                    </span>
+                    {#if $paramListStore[i]}
+                    {#each $paramListStore[i] as param, j}
+                        <input
+                            role="textbox" 
+                            contenteditable="true"
+                            class="param-item scrollbar-hide param-{j} h-[3rem] rounded-md variable-input leading-6 grid place-items-center code-text p-3"
+                            type="text"
+                            bind:value={$paramListStore[i][j]}
+                            on:focus={(evt) => evt.target.select()}
+                            on:focusout={handleFocusOut}
+                            on:dblclick={()=>{
+                                if (selectedParam==j && selectedFunc==i){ 
+                                    selectedParam=null 
+                                    selectedFunc=null;
+                                } else { 
+                                    selectedParam=j;
+                                    selectedFunc=i;
+                                }
+                            }}
+                            on:keypress={(e)=>{
+                                if (e.key == "Enter") {
+                                    e.preventDefault();
+                                    if (!$paramListStore[i]) {
+                                        $paramListStore[i] = [];
+                                    }
+                                    $paramListStore[i].push("");
+                                    $paramListStore[i] = [...$paramListStore[i]];
+                                    $paramListStore = [...$paramListStore];
+                                    setTimeout(()=>{
+                                        const nextParam = document.querySelectorAll(`.param-${j+1}`)[i];
+                                        //select the text inside the input
+                                        // const range = document.createRange();
+                                        // const sel = window.getSelection();
+                                        // range.setStart(nextParam, 0);
+                                        // range.collapse(true);
+                                        // sel.removeAllRanges();
+                                        // sel.addRange(range);
+                                        // nextParam.focus();
+                                    }, 0)
+
+                                    //focus on the next param input
+
+                                }
+                            }}
+                            rows="1"
+                            class:selected-param={(selectedParam==j && selectedFunc==i)}
+                        />
+                    {/each}
+                    {/if}
+                    <button 
+                        on:click={() => {
+                            if (!$paramListStore[i]) {
+                                $paramListStore[i] = [];
+                            }
+                            $paramListStore[i].push("");
+                            $paramListStore[i] = [...$paramListStore[i]];
+                            $paramListStore = [...$paramListStore];
+                        }}
+                        class="sec aspect-square"
+                        use:tippy={{content: tt.addParam, placement: "top"}}
+                    >
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    {#if $paramListStore[i] && $paramListStore[i].length > 0}
+                    <button 
+                        on:click={() => {
+                            if ($paramListStore[i] && selectedParam != null) {
+                                $paramListStore[i].splice(selectedParam, 1);
+                                $paramListStore = [...$paramListStore];
+                                selectedParam = null;
+                                selectedFunc = null;
+                            }
+                            else if ($paramListStore[i]) {
+                                $paramListStore[i].pop();
+                                $paramListStore[i] = [...$paramListStore[i]];
+                                $paramListStore = [...$paramListStore];
+                            }
+                        }}
+                        class="sec aspect-square"
+                        use:tippy={{content: tt.removeParam, placement: "top"}}
+                    >
+                        <i class="fas fa-times"></i>
+                    </button>
+                    {/if}
+                </li>
             {/each}
-        </div>
+        </ul>
     </div>
-
-    <Console />
-
-
-
 </div>
 
 
 <style>
 
-/* disable tab selection highlight for all element */
-    *:focus {
-        outline: none;
-    }
-    
-    *::-webkit-scrollbar {
-        width: 0px;
-        height: 0px;
+    .param-item {
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        display:inline;
+        white-space:nowrap;
     }
 
 
-    *::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0);
+    .parent-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        padding-bottom: 0.2rem;
+        gap : 0.5rem;
     }
 
-    *::-webkit-scrollbar-thumb {
-        background-color: var(--color-tertiary);
-        border-radius: 10px;
+    .quick-func-item {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
     }
 
-    .param-item::-webkit-scrollbar {
-        height: 2px;
+    .quick-func-item > .param-item {
+        flex: 1 1 10rem;
+        overflow-x: scroll;
     }
 
-    .code-text {
-        background-color: var(--color-secondary);
-        color: var(--color-tertiary);
-        font-family: monospace, monospace;
-        letter-spacing: 1px;
+    .variables-container {
+        position: relative;
+        width: 100%;
+        max-height: 50%;
     }
 
-    textarea, .param-item, .search-input {
-        resize: none;
-        background-color: var(--color-secondary);
-        color: var(--color-tertiary);
-        font-family: monospace, monospace;
-        resize: none;
-    white-space: nowrap;
-    /* overflow-x: scroll; */
-        overflow-y: hidden;
-        overflow-x: auto;
+    .functions-container {
+        position: relative;
+        display: flex;
+        max-width: 100%;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1 1 100%;
+        overflow-y: scroll;
     }
 
-    .button {
-        aspect-ratio : 1 / 1;
-        color: var(--color-tertiary);
-        font-weight: bold;
-        font-size: 1.5rem;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        letter-spacing: 1px;
-        background-color: var(--color-secondary);
-        cursor: pointer;
+    .search-result-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
     }
 
-    .exec-button:active {
+
+
+    .selected {
         background-color: var(--color-tertiary);
         color: var(--color-primary);
     }
-    .exec-button:active > span {
-        background-color: var(--color-tertiary);
-        color: var(--color-primary);
+
+    .selected-param {
+        /* white inset box shadow */
+        box-shadow: 0 0 0 1px var(--color-tertiary) inset;
     }
 
+.variable-input {
+    background-color: var(--color-primary);
+    color: var(--color-tertiary);
+}
 
-    .text {
-        color: var(--color-tertiary);
-        font-weight: bold;
-        font-size: 1.5rem;
-        letter-spacing: 1px;
-    }
+.variable-input::selection {
+	background-color: var(--color-tertiary);
+    color: var(--color-primary);
+}
 
-
-
-    .selection {
-        aspect-ratio : 1 / 1;
-        color: var(--color-tertiary);
-        font-weight: bold;
-        font-size: 1.5rem;
-        border-radius: 0.5rem;
-        letter-spacing: 1px;
-        background-color: var(--color-secondary);
-        padding: 0.5rem;
-        cursor: pointer;
-    }
-    .add-button {
-        color: var(--color-tertiary);
-        font-weight: bold;
-        font-size: 1.5rem;
-        border-radius: 0.5rem;
-        letter-spacing: 1px;
-        background-color: var(--color-secondary);
-        padding: 0.5rem;
-        cursor: pointer;
-    }
-
-    .selection:hover ,.add-button:hover, .button:hover {
-        color: var(--color-tertiary);
-        filter: drop-shadow(0 0 0.5rem var(--color-tertiary));
-    }
-
-
-    .toggle-on {
-        border: 2px solid var(--color-tertiary);
-    }
 </style>

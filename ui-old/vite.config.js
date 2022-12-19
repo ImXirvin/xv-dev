@@ -10,9 +10,6 @@ export default defineConfig({
   plugins: [svelte({
     /* plugin options */
   })],
-  optimizeDeps: {
-    exclude: ['totalist', 'sirv', 'local-access']
-  },
   base: './', // fivem nui needs to have local dir reference
   build: {
     emptyOutDir: true,

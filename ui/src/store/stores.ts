@@ -1,110 +1,40 @@
-import type { variables, quickFuncs } from "src/@types";
 import { writable } from "svelte/store";
+import { QuickFunctionDefault, ConfigDefault } from "../utils/Defaults";
 
 export const visibility = writable(false);
 
-sessionStorage.setItem("luaOutput", "");
-export const luaOutput = writable(`` || sessionStorage.getItem(`luaOutput`));
-luaOutput.subscribe((n) => sessionStorage.setItem(`luaOutput`, n));
+export const outputMode = writable(false);
+export const debugMode = writable(false);
 
 
+//for theme
+export const themeStore = writable(localStorage.getItem('theme') || ConfigDefault.theme);
+themeStore.subscribe((value) => {
+    localStorage.setItem('theme', value);
+})
 
-export const debug = writable<boolean>(false || localStorage.getItem(`debug`) === `true`);
+//for code
+export const codeStore = writable( localStorage.getItem('code') || "");
+codeStore.subscribe((value) => {
+    localStorage.setItem('code', value);
+})
 
+//for variables
+export const variablesStore = writable([]);
 
-debug.subscribe((value) => localStorage.enabled = String(value))
+export const variablesLogStore = writable([]);
+export const variablesHTMLStore = writable([]);
 
-sessionStorage.setItem("execHistory", "");
-export const execHistory = writable(`` || sessionStorage.getItem(`execHistory`));
-execHistory.subscribe((n) => sessionStorage.setItem(`execHistory`, n));
+//for quick functions
 
-export const activeGlobalVariables = writable<string[]>([] || JSON.parse(sessionStorage.getItem(`activeGlobalVariables`)));
+export const quickFunctionsStore = writable( JSON.parse(localStorage.getItem('quickFunctions')) || QuickFunctionDefault);
+quickFunctionsStore.subscribe((value) => {
+    localStorage.setItem('quickFunctions', JSON.stringify(value));
+})
 
-export const activeVariables = writable<variables[]>([]);
+export const paramListStore = writable([]);
 
+export const luaOutputStore = writable([]);
 
+export const debugOutputStore = writable([]);
 
-
-let quickFunc: Partial<quickFuncs>[] = [
-    {
-        code: "TriggerEvent",
-        name: "TriggerServerEvent",
-        server: true,
-        params: [],
-        expectedParams: ['event', 'params'],
-    },
-    {
-        code: "TriggerClientEvent",
-        params: [],
-        expectedParams: ['event', 'params'],
-    },
-    {
-        code: "PlayAnim",
-        params: [],
-        expectedParams: ["dict", "anim", "flag", "duration"],
-    },
-    {
-        code: "ClearPedTasks",
-        params: [],
-        expectedParams: ['ped'],
-    },
-    {
-        code: "ClearPedTasksImmediately",
-        params: [],
-        expectedParams: ['ped'],
-    },
-    {
-        code: "SetEntityCoords",
-        params: [],
-        expectedParams: ['entity', 'x', 'y', 'z', 'alive', 'deadFlag', 'ragdollFlag', 'clearArea'],
-    },
-    {
-        code: "SetEntityCoordsNoOffset",
-        params: [],
-        expectedParams: ['entity', 'x', 'y', 'z', 'p4', 'p5', 'p6'],
-    },
-    {
-        code: "SetEntityRotation",
-        params: [],
-        expectedParams: ['entity', 'pitch', 'roll', 'yaw', 'rotationOrder', 'p5'],
-    },
-    {
-        code: "SetEntityVisible",
-        params: [],
-        expectedParams: ['entity', 'toggle'],
-    },
-    {
-        code: "SetEntityHeading",
-        params: [],
-        expectedParams: ['entity', 'heading'],
-    },
-    {
-        code: "SetEntityInvincible",
-        params: [],
-        expectedParams: ['entity', 'toggle'],
-    },
-    {
-        code: "SetEntityCanBeDamaged",
-        params: [],
-        expectedParams: ['entity', 'toggle'],
-    },
-    {
-        code: "GetEntityCoords",
-        params: [],
-        expectedParams: ['entity'],
-    },
-    {
-        code: "GetEntityHeading",
-        params: [],
-        expectedParams: ['entity'],
-    },
-    {
-        code: "GetEntityRotation",
-        params: [],
-        expectedParams: ['entity'],
-    },
-]
-
-export const quickFunctions = writable<Partial<quickFuncs>[]>(quickFunc);
-
-export const luaCode = writable<string>(``);

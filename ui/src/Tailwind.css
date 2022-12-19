@@ -5,11 +5,13 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
+}
+*:focus {
+    outline: none;
 }
 :root {
     font-size: 62.5%;
-    --color-primary: rgba(0, 0, 0, 0.9);
+    --color-primary: rgba(0, 0, 0);
     --color-secondary: rgb(34, 34, 34);
     --color-tertiary: white;
 }
@@ -19,4 +21,78 @@ height: 100vh;
 width: 100vw;
 font-size: 1.6rem;
 overflow: hidden;
+}
+
+@layer components {
+    button.def,
+    .btn-def {
+        background-color: var(--color-tertiary);
+        color: var(--color-secondary);
+        transition: all 0.1s ease-in-out;
+        @apply  font-bold py-2 px-4 rounded;
+    }
+
+    button.def:hover,
+    .btn-def:hover {
+        @apply bg-gray-400;
+    }
+
+    button.sec,
+    .btn-sec {
+        background-color: var(--color-primary);
+        color: var(--color-tertiary);
+        transition: all 0.1s ease-in-out;
+        @apply  font-bold py-2 px-4 rounded;
+    }
+
+    button.sec:hover,
+    .btn-sec:hover {
+        @apply bg-gray-400;
+    }
+
+    button.prio {
+        background-color: var(--color-primary);
+        color: var(--color-tertiary);
+        box-shadow: 0 0 0 0.2rem var(--color-tertiary);
+        transition: all 0.1s ease-in-out;
+        @apply  font-bold py-2 px-4 rounded;
+    }
+
+    button.prio:hover {
+        background-color: var(--color-tertiary);
+        color: var(--color-primary);
+    }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+input, .code-text {
+    outline: none;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+
+.scroll-style::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+
+.scroll-style::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+    background-color: var(--color-tertiary);
+    border-radius: 10px;
+}
+
+.scroll-style-x::-webkit-scrollbar {
+    height: 2px;
+}
+
+.scroll-y::-webkit-scrollbar {
+    width: 2px;
 }

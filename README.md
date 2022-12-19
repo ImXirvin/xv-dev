@@ -5,7 +5,7 @@
 
 Removes the need to make temporary commands to test out some code, or however you test scripts.
 
-[Preview Video](https://streamable.com/s3q4xq)
+[Preview Video](https://streamable.com/fdsqis)
 
 ## Features
 
@@ -14,10 +14,17 @@ Removes the need to make temporary commands to test out some code, or however yo
      - Declare variables to be passed in to the functions
      - Search through a predefined list of functions
      - See all global variables that was declared
+     - Configure by adding/removing/editing functions
 - Console to show if code was executed or returned an error
 - Debug to show code that was executed
-- History component that shows last 25 executions
 - Auto Detection for QBCore and ESX
+- Customisable Editor theme
+
+## Future Features
+- Section for Resource List to allow starting/restarting/stopping resources (like txAdmin)
+- Section for Player for quick Player Options
+- Section for Vehicle for quick Vehicle Options
+- Vehicle section is also planned to have a Vehicle Meta changer built in
 
 ## Installation
 Drag'N'Drop
@@ -38,8 +45,14 @@ To turn it off
 ```lua
 runWhile = false
 ```
-To check for global variables declared in Quick Functions, check the History tabs to see its past states.
 
+## DO
+
+To return a value to the Output tab, you must return outside a function. This is because of a hacky solution to be able to execute the lua code.
+
+```lua
+return "This would be returned to the Output Tab"
+```
 
 ## License
 
