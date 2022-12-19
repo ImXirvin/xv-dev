@@ -85,7 +85,7 @@
 			const rect = element.getBoundingClientRect()
 			const parent = element.parentElement.getBoundingClientRect()
 			
-			console.log({rect, parent})
+			// console.log({rect, parent})
 			
 			initialRect = {
 				width: rect.width,
@@ -241,7 +241,7 @@
     ];
 
 	let selectedIndex = 0;
-	$:console.log(selectedIndex)
+	// $:console.log(selectedIndex)
 </script>
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />

@@ -47,7 +47,7 @@ function updateVariables(variables) {
             }
         }
         n = [...n];
-        console.log('updateVarriable', n)
+        // console.log('updateVarriable', n)
         return n
     });
 }
@@ -65,7 +65,7 @@ function updateDebugOutput(code, eventType, source) {
 
 window.addEventListener("message", (event) => {
     const item = event.data;
-    console.log(item)
+    // console.log(item)
     if (item.action === "updateOutput") {
         updateOutput(item.data.output, item.data.eventType, item.data.red);
     }
