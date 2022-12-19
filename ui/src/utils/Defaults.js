@@ -9,7 +9,8 @@ export let QuickFunctionDefault =
         "params": [],
     },
     {
-        "code": "TriggerClientEvent",
+        "code": "TriggerEvent",
+        "name": "TriggerClientEvent",
         "expectedParams": ['event', 'params'],
         "tags": ["client"],
         "params": [],
