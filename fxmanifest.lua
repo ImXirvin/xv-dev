@@ -3,14 +3,15 @@ fx_version 'cerulean'
 game "gta5"
 
 description "FiveM Development Menu by Xirvin."
-version '2.0.0'
+version '2.0.1'
 
 
 
 ui_page 'html/index.html'
 
 shared_scripts {
-    'shared/lib.lua',
+  '@ox_lib/init.lua'
+  'shared/lib.lua',
 }
 
 client_script {
