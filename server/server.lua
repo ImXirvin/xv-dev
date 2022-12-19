@@ -119,11 +119,11 @@ RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
     end
     local red = false
     local output = ""
-    local func, err = load(code)
+    local func, err = load('return ' .. code, '@xv-dev')
     if func then
-        local status, result = pcall(func)
+        local status, result = pcall(func, '@xv-dev')
         if status then
-            output = "Executed"
+            output = tostring(result or "Executed")
             red = false
         else
             output = "Error: " .. (result or "Unknown")
