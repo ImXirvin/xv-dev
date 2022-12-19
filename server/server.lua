@@ -87,6 +87,19 @@ RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedS
             return
         end
         TriggerEvent('xv-dev:server:ExecLua', src, code)
+    elseif eventType =='both' then
+        if not allowedClient and Config.StrictMode then
+            TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute client side code')
+            print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            return
+        end
+        if not allowedServer and Config.StrictMode then
+            TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
+            print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            return
+        end
+        TriggerClientEvent('xv-dev:client:ExecLua', src, code)
+        TriggerEvent('xv-dev:server:ExecLua', src, code)
     elseif eventType == 'source' then
         if not allowedServer and Config.StrictMode then
             TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
