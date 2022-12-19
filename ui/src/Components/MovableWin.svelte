@@ -4,6 +4,8 @@
   // @ts-ignore
   import LuaExec from "./LuaExec.svelte";
   // @ts-ignore
+  import Settings from "./Settings.svelte";
+  // @ts-ignore
   import QuickFunc from "./QuickFunc.svelte";
   import { outputMode } from "../store/stores";
   import Output from "./Output.svelte";
@@ -212,23 +214,29 @@
 
 	let options =  [
         {
-            name: "Lua Executor",
-            icon: "fas fa-terminal",
-            component: LuaExec,
+            "name": "Lua Executor",
+            "icon": "fas fa-terminal",
+            "component": LuaExec,
         },
         {
-            name: "Quick Functions",
-            icon: "fas fa-bolt",
-          component: QuickFunc,
+            "name": "Quick Functions",
+            "icon": "fas fa-bolt",
+          "component": QuickFunc,
         },
+		{
+			"name": "Player",
+			"icon": "fas fa-user",
+			// "component": Player,
+		},
+		{
+			"name": "Vehicle",
+			"icon": "fas fa-car",
+			// "component": Vehicle,
+		},
         {
-            name: "History",
-            icon: "fas fa-history",
-        //   component: History,
-        },
-        {
-            name: "Settings",
-            icon: "fas fa-cog",
+            "name": "Settings",
+            "icon": "fas fa-cog",
+			"component": Settings,
         },
     ];
 

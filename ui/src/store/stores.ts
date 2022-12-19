@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { QuickFunctionDefault } from "../utils/QuickFunctions";
+import { QuickFunctionDefault, ConfigDefault } from "../utils/Defaults";
 
 export const visibility = writable(false);
 
@@ -8,9 +8,10 @@ export const debugMode = writable(false);
 
 
 //for theme
-const selectedTheme = localStorage.theme;
-export const theme = writable(selectedTheme || "merbivore_soft");
-theme.subscribe((value) => localStorage.theme = value)
+export const themeStore = writable(localStorage.getItem('theme') || ConfigDefault.theme);
+themeStore.subscribe((value) => {
+    localStorage.setItem('theme', value);
+})
 
 //for code
 export const codeStore = writable( localStorage.getItem('code') || "");

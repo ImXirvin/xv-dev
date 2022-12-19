@@ -2,7 +2,7 @@
   import { AceEditor } from "svelte-ace";
   import { LuaHandler } from "../utils/luaHandler";
   import { SendNUI } from "../utils/SendNUI";
-  import { theme, codeStore } from "../store/stores";
+  import { themeStore, codeStore } from "../store/stores";
   import {tippy} from 'svelte-tippy';
   import 'tippy.js/dist/tippy.css';
   import { tooltip } from "../utils/tooltip";
@@ -51,7 +51,7 @@
       width='100%'
       height='100%'
       lang="lua"
-      theme="{$theme}"
+      theme="{$themeStore}"
       bind:value={$codeStore} 
     />
   </div>

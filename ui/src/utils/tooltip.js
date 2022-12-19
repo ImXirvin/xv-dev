@@ -18,4 +18,7 @@ export const tooltip = {
     outputTab: "Toggle Output Tab",
     historyTab: "Toggle History Tab",
     variablesTab: "Toggle Variables Tab",
+
+    //Settings
+    theme: "Select a Theme",
 }

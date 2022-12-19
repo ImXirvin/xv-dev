@@ -94,3 +94,10 @@ export let QuickFunctionDefault =
         "params": [],
     },
 ]
+
+
+
+export let ConfigDefault = {
+    "theme": "merbivore_soft",
+
+}
