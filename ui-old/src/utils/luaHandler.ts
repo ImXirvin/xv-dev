@@ -20,13 +20,13 @@ function updateOutput(output, eventType) {
     // scrollToBottom(luaOutputElement);
 }
 
-export function execLuaRaw(code: string, eventType: string) {
+export function execLuaRaw(code: string, eventType: string, source: string) {
     let debugString = `Raw Lua: ${code}`;
     if (isDebug) {
         updateOutput(debugString, 'DEBUG');
     }
     execHistory.update((n) => n + `[${getDateTime()}][${eventType}]: ${code}\n`);
-    SendNUI("ExecuteLua", {code: code, eventType: eventType, });
+    SendNUI("ExecuteLua", {code: code, eventType: eventType, source: source});
 }
 
 export function execQuickFunc(funcObject: any, variables: any) {

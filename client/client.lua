@@ -73,6 +73,7 @@ end)
 RegisterNUICallback('ExecuteLua', function(data, cb)
     local code = data.code
     local eventType = data.eventType
-    TriggerServerEvent('xv-dev:server:verifyExec', code, eventType)
+    local selectedSrc = data.source
+    TriggerServerEvent('xv-dev:server:verifyExec', code, eventType, selectedSrc)
     cb(1)
 end)

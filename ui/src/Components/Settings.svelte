@@ -5,10 +5,10 @@
     import 'tippy.js/dist/tippy.css';
     import { tooltip } from "../utils/tooltip";
     const tt = tooltip;
-
     import { AceEditor } from "svelte-ace";
     import "brace/mode/json";
     import "brace/theme/clouds_midnight";
+
     let configuringQuickFunctions = false;
 
     let quickFun = JSON.stringify(JSON.parse(localStorage.getItem('quickFunctions')), null, "\t");;
