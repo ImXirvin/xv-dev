@@ -17,8 +17,9 @@ Removes the need to make temporary commands to test out some code, or however yo
      - Configure by adding/removing/editing functions
 - Console to show if code was executed or returned an error
 - Debug to show code that was executed
-- Auto Detection for QBCore and ESX
+- Auto Detection for QBCore/ESX/Ox_lib
 - Customisable Editor theme
+
 
 ## Future Features
 - Section for Resource List to allow starting/restarting/stopping resources (like txAdmin)
