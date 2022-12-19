@@ -21,4 +21,7 @@ export const tooltip = {
 
     //Settings
     theme: "Select a Theme",
+    quickFuncWarning: "WARNING: Saving cannot be undone",
+    quickFuncEditorWarning: "NOTE: If you resize the window, open and close again.",
+    quickFuncDefault: "Reset back to Default",
 }
