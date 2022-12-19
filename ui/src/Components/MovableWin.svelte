@@ -224,6 +224,11 @@
           "component": QuickFunc,
         },
 		{
+			"name": "Resource List",
+			"icon": "fas fa-list",
+			// "component": ResourceList,
+		},
+		{
 			"name": "Player",
 			"icon": "fas fa-user",
 			// "component": Player,
