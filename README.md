@@ -5,6 +5,8 @@ Removes the need to make temporary commands to test out some code, or however yo
 
 [Preview Video](https://streamable.com/fdsqis)
 
+[Code Editor Themes](https://imgur.com/a/5EBCj8f)
+
 ## Features
 
 - Execute any code using the Lua Executor 
