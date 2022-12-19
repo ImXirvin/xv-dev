@@ -54,16 +54,17 @@ end
 
 RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedSrc)
     local src = source
-    local selectedSrc = nil
+    -- local selectedSrc = nil
+    local srcTable = {}
     --turn selectedSrc into a number or table of numbers
     if eventType == 'client' then
         selectedSrc = source
-    else if eventType == 'source' then
+    elseif eventType == 'source' then
         local tempSrc = selectedSrc
         -- seperate tempSrc by comma
-        selectedSrc = {}
+
         for i in string.gmatch(tempSrc, '([^,]+)') do
-            table.insert(selectedSrc, tonumber(i))
+            table.insert(srcTable, tonumber(i))
         end
     end
 
@@ -86,18 +87,14 @@ RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedS
             return
         end
         TriggerEvent('xv-dev:server:ExecLua', src, code)
-    else if eventType == 'source' then
+    elseif eventType == 'source' then
         if not allowedServer and Config.StrictMode then
             TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
             print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
             return
         end
-        if type(selectedSrc) == 'number' then
-            TriggerClientEvent('xv-dev:client:ExecLua', selectedSrc, code)
-        elseif type(selectedSrc) == 'table' then
-            for k, v in pairs(selectedSrc) do
-                TriggerClientEvent('xv-dev:client:ExecLua', v, code)
-            end
+        for k, v in pairs(srcTable) do
+            TriggerClientEvent('xv-dev:client:ExecLua', v, code)
         end
     end
 end)
