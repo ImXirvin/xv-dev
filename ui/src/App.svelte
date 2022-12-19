@@ -48,7 +48,7 @@
   let WindowLeft;
   let WindowTop;
 
-$: console.log(WindowHeight, WindowWidth, WindowLeft, WindowTop)
+// $: console.log(WindowHeight, WindowWidth, WindowLeft, WindowTop)
 </script>
 
 <VisibilityProvider>
