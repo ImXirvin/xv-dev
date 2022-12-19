@@ -10,7 +10,7 @@ version '2.0.1'
 ui_page 'html/index.html'
 
 shared_scripts {
-  '@ox_lib/init.lua'
+  '@ox_lib/init.lua',
   'shared/lib.lua',
 }
 
