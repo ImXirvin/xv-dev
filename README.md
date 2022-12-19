@@ -1,8 +1,6 @@
 # XV-DEV
 ## Development menu for FiveM
 
-## NOTE: BIG REDO OF UI IS BEING WORKED ON
-
 Removes the need to make temporary commands to test out some code, or however you test scripts.
 
 [Preview Video](https://streamable.com/fdsqis)
