@@ -15,31 +15,36 @@ end)
 
 local function CheckPerms(source)
     local src = source
-    local allowedServer = false
-    local allowedClient = false
-    local allowed = IsPlayerAceAllowed(src, 'command.dev')
+    local perms = {}
+    perms.allowed = IsPlayerAceAllowed(src, 'command.dev')
 
-    if not allowed then
+    if not perms.allowed then
+        -- print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+        SendHook('Unauthorized access to dev menu', 'Player: ' .. GetPlayerName(src) .. ' tried to access the dev menu', 'red')
         DropPlayer(src, 'Unauthorized access to dev menu')
-        print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
         return
     end
 
-    if Config.StrictMode then
+    if ConfigForXVDev.StrictMode then
         local identifierTable = GetPlayerIdentifiers(src)
-        for k, v in pairs(Config.Identifiers) do
+        for k, v in pairs(ConfigForXVDev.Identifiers) do
             if v.licenses then
                 for i, j in pairs(v.licenses) do
                     for x, y in pairs(identifierTable) do
                         if j == y then
                             if v.client then
                                 if eventType == "client" then
-                                    allowedClient = true
+                                    perms.client = true
                                 end
                             end
                             if v.server then
                                 if eventType == "server" then
-                                    allowedServer = true
+                                    perms.server = true
+                                end
+                            end
+                            if v.remote then
+                                if eventType == "remote" then
+                                    perms.remote = true
                                 end
                             end
                         end
@@ -49,7 +54,7 @@ local function CheckPerms(source)
         end
     end
 
-    return allowed, allowedClient, allowedServer
+    return perms
 end
 
 RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedSrc)
@@ -68,37 +73,43 @@ RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedS
         end
     end
 
-    local allowed, allowedClient, allowedServer = CheckPerms(src)
+    local perms = CheckPerms(src)
+    if not perms.allowed then
+        return
+    end
     if code == nil then
         TriggerClientEvent('openDevMenu', src)
         return
     end
     if eventType == 'client' then
-        if not allowedClient and Config.StrictMode then
+        if not perms.client and ConfigForXVDev.StrictMode then
             TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute client side code')
-            print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            -- print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            SendHook('Unauthorized Client execution using Dev Menu', 'Player: ' .. GetPlayerName(src) .. ' tried to execute client side code', 'red')
             return
         end
         TriggerClientEvent('xv-dev:client:ExecLua', src, code)
     elseif eventType == 'server' then
-        if not allowedServer and Config.StrictMode then
+        if not perms.server and ConfigForXVDev.StrictMode then
             TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
-            print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            -- print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            SendHook('Unauthorized Sever execution using Dev Menu', 'Player: ' .. GetPlayerName(src) .. ' tried to execute server side code', 'red')
             return
         end
         TriggerEvent('xv-dev:server:ExecLua', src, code)
     elseif eventType =='both' then
-        if not allowedClient and Config.StrictMode then
+        if not perms.client and not perms.server and ConfigForXVDev.StrictMode then
             TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute client side code')
-            print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            -- print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            SendHook('Unauthorized Client or Server execution using Dev Menu', 'Player: ' .. GetPlayerName(src) .. ' tried to execute client and server side code', 'red')
             return
         end
         TriggerClientEvent('xv-dev:client:ExecLua', src, code)
         TriggerEvent('xv-dev:server:ExecLua', src, code)
     elseif eventType == 'source' then
-        if not allowedServer and Config.StrictMode then
+        if not perms.remote and ConfigForXVDev.StrictMode then
             TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
-            print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+            SendHook('Unauthorized Client execution using Dev Menu', 'Player: ' .. GetPlayerName(src) .. ' tried to execute remote Sources ('.. json.encode(srcTable) .. ') side code', 'red')
             return
         end
         for k, v in pairs(srcTable) do
@@ -111,10 +122,10 @@ end)
 
 RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
     local src = source
-    local allowed, allowedClient, allowedServer = CheckPerms(src)
-    if not allowedServer and Config.StrictMode then
+    local perms = CheckPerms(src)
+    if not perms.server and ConfigForXVDev.StrictMode then
         TriggerClientEvent('chatMessage', src, 'Dev Menu', {255, 0, 0}, 'You are not allowed to execute server side code')
-        print('Unauthorized access to dev menu by ' .. GetPlayerName(src))
+        SendHook('Unauthorized Sever execution using Dev Menu', 'Player: ' .. GetPlayerName(src) .. ' tried to execute server side code', 'red')
         return
     end
     local red = false
@@ -135,3 +146,24 @@ RegisterNetEvent('xv-dev:server:ExecLua', function(source, code)
     end
     TriggerClientEvent('xv-dev:client:UpdateOutput', src, output, 'server', red)
 end)
+
+
+
+
+function SendHook(title, message, color)
+    if not ConfigForXVDev.Webhook then
+        print('No webhook set in config')
+        return
+    end
+    local embedData = {
+        {
+            ["title"] = title,
+            ["color"] = ConfigForXVDev.Colors[color] or ConfigForXVDev.Colors['red'],
+            ["footer"] = {
+                ["text"] = os.date("%c"),
+            },
+            ["description"] = message,
+        }
+    }
+    PerformHttpRequest(ConfigForXVDev.Webhook, function(err, text, headers) end, 'POST', json.encode({username = ConfigForXVDev.HookName,embeds = embedData, avatar_url = ConfigForXVDev.HookAvatar }), { ['Content-Type'] = 'application/json' })
+end
