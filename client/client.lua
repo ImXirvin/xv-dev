@@ -8,7 +8,7 @@ CreateThread(function()
     end
     --get resource state of esx
     if GetResourceState('es_extended') == 'started' then
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+        ESX = exports["es_extended"]:getSharedObject()
     end
 end)
 
