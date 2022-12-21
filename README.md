@@ -4,12 +4,15 @@
 Removes the need to make temporary commands to test out some code, or however you test scripts.
 
 [Preview Video](https://streamable.com/fdsqis)
+
 [Resource Manager Preview Video](https://streamable.com/ygan7k)
 
 [Code Editor Themes](https://imgur.com/a/5EBCj8f)
 
-## Features
+## Note
+`StrictResEdit` is `true` by default. This means the player must have atleast 1 valid identifier set. If false, anyone allowed to use the menu will be edit resources.
 
+## Features
 - Execute any code using the Lua Executor 
 - Execute commonly used natives through the Quick Functions tab.
      - Declare variables to be passed in to the functions

@@ -17,6 +17,8 @@ ConfigForXVDev = {
         },
     },
 
+    StrictResEdit = true, --If true, player must have atleast 1 valid identifier in Identifiers table to edit resources.
+
     Webhook = "https://discord.com/api/webhooks/1054681685968560148/v-1E5A2-cYKgrH_zPBqiZHsDCA0eWBZL6N9S_EWXKEbhSBcF-PCQTmUWJt-WS1E43ZSe", -- Discord webhook to send logs to
 
     Colors = {

@@ -51,6 +51,24 @@ local function CheckPerms(source)
         end
     end
 
+    if ConfigForXVDev.StrictResEdit then
+        local identifierTable = GetPlayerIdentifiers(src)
+        for k, v in pairs(ConfigForXVDev.Identifiers) do
+            if v.licenses then
+                for i, j in pairs(v.licenses) do
+                    for x, y in pairs(identifierTable) do
+                        if j == y then
+                            if v.manageRes then
+                                perms.manageRes = true
+                                perms.allowedEdit = true
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     return perms
 end
 
@@ -258,7 +276,7 @@ RegisterNetEvent('xv-dev:server:editResource', function(resName) --sends the cli
     local perms = CheckPerms(src)
     local red = false
     local output = ""
-    if not perms.manageRes and ConfigForXVDev.StrictMode then 
+    if not perms.manageRes and ConfigForXVDev.StrictMode or not perms.allowedEdit and ConfigForXVDev.StrictResEdit then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
         return
     end 
@@ -283,7 +301,7 @@ RegisterNetEvent('xv-dev:server:saveResource', function(resource, route, content
     local red = false
     local output = ""
     local originalResource = LoadResourceFile(resource, route)
-    if not perms.manageRes and ConfigForXVDev.StrictMode then 
+    if not perms.manageRes and ConfigForXVDev.StrictMode or not perms.allowedEdit and ConfigForXVDev.StrictResEdit then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
         return
     end 
@@ -336,7 +354,7 @@ RegisterNetEvent('xv-dev:server:getData', function (resource, route) --Sends the
     local output = ""
     local extension = nil
 
-    if not perms.manageRes and ConfigForXVDev.StrictMode then 
+    if not perms.manageRes and ConfigForXVDev.StrictMode or not perms.allowedEdit and ConfigForXVDev.StrictResEdit then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
         return
     end
