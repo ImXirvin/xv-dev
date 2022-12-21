@@ -4,6 +4,7 @@
 Removes the need to make temporary commands to test out some code, or however you test scripts.
 
 [Preview Video](https://streamable.com/fdsqis)
+[Resource Manager Preview Video](https://streamable.com/ygan7k)
 
 [Code Editor Themes](https://imgur.com/a/5EBCj8f)
 
