@@ -38,3 +38,6 @@ export const luaOutputStore = writable([]);
 
 export const debugOutputStore = writable([]);
 
+export const resourceStore = writable([]);
+
+export const listenEsc = writable(true);
