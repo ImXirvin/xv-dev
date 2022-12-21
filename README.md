@@ -19,10 +19,14 @@ Removes the need to make temporary commands to test out some code, or however yo
 - Debug to show code that was executed
 - Auto Detection for QBCore/ESX/Ox_lib
 - Customisable Editor theme
+- Advanced Discord Webhooks
+- Advanced Resource Manager
+    - Start/Stop/Restart Resources
+    - Edit Files on the go with built-in Editor
+    - Makes Backups in dedicated backups folder
 
 
 ## Future Features
-- Section for Resource List to allow starting/restarting/stopping resources (like txAdmin)
 - Section for Player for quick Player Options
 - Section for Vehicle for quick Vehicle Options
 - Vehicle section is also planned to have a Vehicle Meta changer built in

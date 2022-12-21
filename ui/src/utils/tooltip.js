@@ -24,4 +24,14 @@ export const tooltip = {
     quickFuncWarning: "WARNING: Saving cannot be undone",
     quickFuncEditorWarning: "NOTE: If you resize the window, open and close again.",
     quickFuncDefault: "Reset back to Default",
+
+    //ResourceManager
+    refreshList: "Refresh List",
+    stopResource: "Stop Resource",
+    startResource: "Start Resource",
+    restartResource: "Restart Resource",
+    editResource: "Edit Resource",
+    toggleAutoRestart: "AutoRestart on File Edit",
+    closeFileList: "Close File List",
+    editFile: "Edit File",
 }
