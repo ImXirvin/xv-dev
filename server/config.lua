@@ -14,6 +14,7 @@ ConfigForXVDev = {
             server = true, --Allowed to execute server side code
             remote = true, --Allowed to execute remote code on Source
             manageRes = true, --Allowed to manage resources
+            editRes = true, --Allowed to edit resources
         },
     },
 

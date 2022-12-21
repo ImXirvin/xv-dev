@@ -44,6 +44,9 @@ local function CheckPerms(source)
                             if v.manageRes then
                                 perms.manageRes = true
                             end
+                            if v.editRes then
+                                perms.allowedEdit = true
+                            end
                         end
                     end
                 end
@@ -58,7 +61,7 @@ local function CheckPerms(source)
                 for i, j in pairs(v.licenses) do
                     for x, y in pairs(identifierTable) do
                         if j == y then
-                            if v.manageRes then
+                            if v.editRes then
                                 perms.manageRes = true
                                 perms.allowedEdit = true
                             end
