@@ -95,7 +95,7 @@
     </div>
     <div class="functions-container scrollbar-hide">
         <span class="relative">
-            <input bind:value={quickSearcTerm} class=" relative h-[3rem] rounded-md variable-input leading-6 px-2" placeholder="Search for a function" />
+            <input bind:value={quickSearcTerm} class=" relative h-[3rem] rounded-md variable-input leading-6" placeholder="Search for a function" />
         </span>
         <ul class="search-result-container w-full scrollbar-hide overflow-y-scroll flex flex-col gap-2 relative"> 
             {#each quickSearchResults as qfunc, i}

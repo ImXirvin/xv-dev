@@ -12,8 +12,7 @@ ConfigForXVDev = {
             },
             client = true, --Allowed to execute client side code
             server = true, --Allowed to execute server side code
-            remote = true, --Allowed to execute remote code on Source
-            manageRes = true, --Allowed to manage resources
+            remote = true,
         },
     },
 
@@ -22,19 +21,11 @@ ConfigForXVDev = {
     Colors = {
         ["red"] = 16711680,
         ["yellow"] = 15335168,
-        ["green"] = 65280,
-        ["blue"] = 255,
-        ["purple"] = 8388736,
-        ["orange"] = 16744192,
-        ["pink"] = 16711935,
-        ["white"] = 16777215,
         ["black"] = 0,
     },
 
     HookName = "Dev Menu by Xirvin", -- Name of the webhook
     HookAvatar= "https://cdn.discordapp.com/avatars/321736959515164692/41cd15ca7af8141672d45136d3f51b0d.webp?size=128",
-
-    HookOnResourceEvents = false, -- If true, will send a webhook message when a resource is started, stopped or restarted BUT EDITS WILL ALWAYS SEND A WEBHOOK MESSAGE REGARDLESS OF THIS CONFIG
 }
 
 

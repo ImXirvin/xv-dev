@@ -3,7 +3,7 @@
   import VisibilityProvider from "./providers/VisibilityProvider.svelte";
   import { debugData } from './utils/debugData';
   import { ReceiveNUI } from "./utils/ReceiveNUI";
-  import { debugMode, visibility, resourceStore } from "./store/stores";
+  import { debugMode, visibility } from "./store/stores";
   import { onMount } from "svelte";
   
   debugData([
@@ -39,11 +39,10 @@
     $visibility = data.show;
   });
 
-  ReceiveNUI('updateResourceList', (data) => {
-    $resourceStore = data.resources;
+  onMount(() => { 
+
   });
-
-
+  
   let WindowHeight;
   let WindowWidth;
   let WindowLeft;

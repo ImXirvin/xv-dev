@@ -109,9 +109,4 @@ export class LuaHandler {
         this.ExecuteLua(code, (func.server ? "server" : "client"), null);
         updateVariables(vars)
     }
-
-    ResourceManage(resource: string, action: string) {
-        SendNUI("ManageResource", {resource: resource, action: action});
-        updateDebugOutput(`${action} ${resource}`, "Resource", null);
-    }
 }

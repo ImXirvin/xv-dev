@@ -1,9 +1,11 @@
 <script>
   // @ts-ignore
   import Drawer from "./Drawer.svelte"
+  // @ts-ignore
   import LuaExec from "./LuaExec.svelte";
+  // @ts-ignore
   import Settings from "./Settings.svelte";
-  import Resources from "./Resources.svelte";
+  // @ts-ignore
   import QuickFunc from "./QuickFunc.svelte";
   import { outputMode } from "../store/stores";
   import Output from "./Output.svelte";
@@ -224,7 +226,7 @@
 		{
 			"name": "Resource List",
 			"icon": "fas fa-list",
-			"component": Resources,
+			// "component": ResourceList,
 		},
 		{
 			"name": "Player",

@@ -3,7 +3,7 @@ fx_version 'cerulean'
 game "gta5"
 
 description "FiveM Development Menu by Xirvin."
-version '2.1.0'
+version '2.0.1'
 
 
 

@@ -2,7 +2,7 @@
   import { ReceiveNUI } from '../utils/ReceiveNUI';
   import { SendNUI } from '../utils/SendNUI';
   import { onMount } from 'svelte';
-  import { visibility, listenEsc } from '../store/stores';
+  import { visibility } from '../store/stores';
   import BackdropFix from './BackdropFix.svelte';
 
 
@@ -19,7 +19,7 @@
 
   onMount(() => {
     const keyHandler = (e: KeyboardEvent) => {
-      if (isVisible && ['Escape'].includes(e.code) && $listenEsc) {
+      if (isVisible && ['Escape'].includes(e.code)) {
         SendNUI('hideUI');
         visibility.set(false);
       }
