@@ -1,6 +1,7 @@
 QBCore = nil
 ESX = nil
 
+local isOutdatedInfo = false
 CreateThread(function()
     --get resource state of qb-core
     if GetResourceState('qb-core') == 'started' then
@@ -10,6 +11,16 @@ CreateThread(function()
     if GetResourceState('es_extended') == 'started' then
         TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
     end
+
+    --version check with github latest version
+    PerformHttpRequest('https://raw.githubusercontent.com/ImXirvin/xv-dev/main/fxmanifest.lua', function(err, text, headers)
+        local version = GetResourceMetadata(GetCurrentResourceName(), 'version')
+        local latestVersion = string.match(text, '%sversion \'(.-)\'')
+        if version ~= latestVersion then
+            print('^1[xv-dev]^7: ^1Your version of xv-dev is outdated. Please update to the latest version.^7')
+            isOutdatedInfo = true
+        end
+    end, 'GET')
 end)
 
 
@@ -77,8 +88,16 @@ end
 
 RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedSrc)
     local src = source
+
+    if isOutdatedInfo then
+        local red = true
+        local output = 'Your version of xv-dev is outdated. Please update to the latest version to ensure it is safe as possible.'
+        TriggerClientEvent('xv-dev:client:updateOutput', src, output, 'INFO', red)
+        isOutdatedInfo = false
+    end
+    
     --check if code includes ConfigForXVDev thats not in a string
-    if code ~= nil then -- ChatGPT is goated fr
+    if code ~= nil then
         if string.find(code, 'ConfigForXVDev') then
             SendHook('Attemped Config Edit', 'Player: ' .. GetPlayerName(src) .. ' tried to edit the config', 'red')
             local red = true

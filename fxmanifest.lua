@@ -2,8 +2,11 @@ fx_version 'cerulean'
 
 game "gta5"
 
-description "FiveM Development Menu by Xirvin."
-version '2.1.0'
+name 'xv-dev'
+author 'Xirvin#0985'
+description "FiveM Development Menu."
+version '2.1.1'
+repository 'https://github.com/ImXirvin/xv-dev'
 
 
 
