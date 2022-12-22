@@ -5,6 +5,7 @@
   import { ReceiveNUI } from "./utils/ReceiveNUI";
   import { debugMode, visibility, resourceStore } from "./store/stores";
   import { onMount } from "svelte";
+  import DebugBrowser from "./Components/DebugBrowser.svelte";
   
   debugData([
     {
@@ -63,3 +64,7 @@
   />
 
 </VisibilityProvider>
+
+{#if $debugMode}
+  <DebugBrowser />
+{/if}

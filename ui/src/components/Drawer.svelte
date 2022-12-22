@@ -32,11 +32,6 @@
               <i class="fas fa-right-from-bracket"></i>
             </p>
           </li>
-          <!-- <li use:tippy={{content: `Debug`, placement: "right"}} class="nav-item self-end">
-            <p class:selected={$debugMode} class="nav-link" on:click={() =>$debugMode=!$debugMode}>
-              <i class="fas fa-bug"></i>
-            </p>
-          </li> -->
         </div>
     </ul>
 </nav>
