@@ -77,6 +77,18 @@ end
 
 RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedSrc)
     local src = source
+    --check if code includes ConfigForXVDev thats not in a string
+    if code ~= nil then -- ChatGPT is goated fr
+        if string.find(code, 'ConfigForXVDev') then
+            SendHook('Attemped Config Edit', 'Player: ' .. GetPlayerName(src) .. ' tried to edit the config', 'red')
+            local red = true
+            local output = 'You are not allowed to edit the config.'
+            TriggerClientEvent('xv-dev:client:updateOutput', src, output, 'server', red)
+            return
+        end
+    end
+
+
     -- local selectedSrc = nil
     local srcTable = {}
     --turn selectedSrc into a number or table of numbers
@@ -85,7 +97,6 @@ RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedS
     elseif eventType == 'source' then
         local tempSrc = selectedSrc
         -- seperate tempSrc by comma
-
         for i in string.gmatch(tempSrc, '([^,]+)') do
             table.insert(srcTable, tonumber(i))
         end
@@ -134,7 +145,6 @@ RegisterNetEvent('xv-dev:server:verifyExec', function(code, eventType, selectedS
             TriggerClientEvent('xv-dev:client:ExecLua', v, code)
         end
     end
-    TriggerEvent('xv-dev:server:updateResourceList', src)
 end)
 
 
