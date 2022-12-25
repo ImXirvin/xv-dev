@@ -28,6 +28,15 @@ Removes the need to make temporary commands to test out some code, or however yo
     - Start/Stop/Restart Resources
     - Edit Files on the go with built-in Editor
     - Makes Backups in dedicated backups folder
+- Advanced Player Manager
+    - Teleport to them
+    - Teleport them to you
+    - Teleport them to a coordinate
+    - Freeze them
+    - Unfreeze them
+    - Spawn them a vehicle
+    - Delete their vehicle
+    - Execute code directly to their client
 
 
 ## Future Features
