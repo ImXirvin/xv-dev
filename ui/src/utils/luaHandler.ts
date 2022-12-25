@@ -77,7 +77,9 @@ window.addEventListener("message", (event) => {
 export class LuaHandler {
     
     ExecuteLua(lua: string, eventType: string, source: string) {
-        let code = `(function() return (function() ${lua} end)() end)()`
+        let code = `(function() return (function() \n
+            ${lua} \n
+            end)() end)()`
         updateDebugOutput(lua, eventType, source);
         SendNUI("ExecuteLua", {code: code, eventType: eventType, source: source});
     }

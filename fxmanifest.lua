@@ -5,7 +5,7 @@ game "gta5"
 name 'xv-dev'
 author 'Xirvin#0985'
 description "FiveM Development Menu."
-version '2.2.0'
+version '2.2.1'
 repository 'https://github.com/ImXirvin/xv-dev'
 
 
