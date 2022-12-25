@@ -7,6 +7,7 @@
   import QuickFunc from "./QuickFunc.svelte";
   import { outputMode } from "../store/stores";
   import Output from "./Output.svelte";
+  import Players from "./Players.svelte";
 
 
 	let moving = false;
@@ -229,7 +230,7 @@
 		{
 			"name": "Player",
 			"icon": "fas fa-user",
-			// "component": Player,
+			"component": Players,
 		},
 		{
 			"name": "Vehicle",

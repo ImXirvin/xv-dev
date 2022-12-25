@@ -3,7 +3,7 @@
   import VisibilityProvider from "./providers/VisibilityProvider.svelte";
   import { debugData } from './utils/debugData';
   import { ReceiveNUI } from "./utils/ReceiveNUI";
-  import { debugMode, visibility, resourceStore } from "./store/stores";
+  import { debugMode, visibility, resourceStore, playerListStore, curPlayerDataStore } from "./store/stores";
   import { onMount } from "svelte";
   import DebugBrowser from "./Components/DebugBrowser.svelte";
   
@@ -50,7 +50,14 @@
   let WindowLeft;
   let WindowTop;
 
-// $: console.log(WindowHeight, WindowWidth, WindowLeft, WindowTop)
+
+  ReceiveNUI('updatePlayerList', (data) => {
+    $playerListStore = data.players;
+  });
+
+  ReceiveNUI('updatePlayerData', (data) => {
+        $curPlayerDataStore = data;
+    });
 </script>
 
 <VisibilityProvider>

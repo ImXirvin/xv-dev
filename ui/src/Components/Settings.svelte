@@ -7,7 +7,6 @@
     const tt = tooltip;
     import { AceEditor } from "svelte-ace";
     import "brace/mode/json";
-    import "brace/theme/clouds_midnight";
 
     let configuringQuickFunctions = false;
 
@@ -63,7 +62,7 @@
               width='100%'
               height='100%'
               lang="json"
-              theme="{"clouds_midnight"}"
+              theme="{$themeStore}"
               bind:value={quickFun} 
             />
         </div>

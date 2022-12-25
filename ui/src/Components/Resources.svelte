@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { debugData } from '../utils/debugData';
     import { resourceStore, listenEsc } from '../store/stores';
     import {tippy} from 'svelte-tippy';
     import 'tippy.js/dist/tippy.css';
@@ -300,7 +299,6 @@
                         </li>
                     {/each}
             </div>
-
         </div>
     {/if}
 </div>
@@ -323,7 +321,7 @@
             SAVE
         </button>
         <button class="def relative"
-        use:tippy={{content: tt.closeFileList, placement: "top"}}
+        use:tippy={{content: tt.closeEditor, placement: "top"}}
         on:click={()=>showEditor = false}
         >
             <i class="fa-solid fa-multiply"></i>
@@ -337,10 +335,6 @@
 
 
 <style>
-    .variable-input {
-    background-color: var(--color-primary);
-    color: var(--color-tertiary);
-}
 
 
 .options {

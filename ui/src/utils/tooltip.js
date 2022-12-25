@@ -34,4 +34,17 @@ export const tooltip = {
     toggleAutoRestart: "AutoRestart on File Edit",
     closeFileList: "Close File List",
     editFile: "Edit File",
+    closeEditor: "Close Editor",
+    saveFile: "Save File",
+
+    //Players
+    refreshPlayers: "Refresh Players",
+    managePlayer: "Manage Player",
+    copyIdentifier: "Copy Identifier",
+    copyCoords: "Copy Coords",
+    copyHeading: "Copy Heading",
+    copyVehicleName: "Copy Vehicle Name",
+    copyModel: "Copy Model",
+    setWaypoint: "Set Waypoint",
+
 }

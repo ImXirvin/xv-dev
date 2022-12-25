@@ -25,12 +25,14 @@ overflow: hidden;
 
 @layer components {
     button.def,
-    .btn-def {
+    .btn-def,
+    div.def {
         background-color: var(--color-tertiary);
         color: var(--color-secondary);
         transition: all 0.1s ease-in-out;
         @apply  font-bold py-2 px-4 rounded;
     }
+    
 
     button.def:hover,
     .btn-def:hover {
@@ -38,7 +40,8 @@ overflow: hidden;
     }
 
     button.sec,
-    .btn-sec {
+    .btn-sec,
+    div.sec {
         background-color: var(--color-primary);
         color: var(--color-tertiary);
         transition: all 0.1s ease-in-out;
@@ -50,7 +53,8 @@ overflow: hidden;
         @apply bg-gray-400;
     }
 
-    button.prio {
+    button.prio,
+    div.prio {
         background-color: var(--color-primary);
         color: var(--color-tertiary);
         box-shadow: 0 0 0 0.2rem var(--color-tertiary);
@@ -95,4 +99,14 @@ input, .code-text {
 
 .scroll-y::-webkit-scrollbar {
     width: 2px;
+}
+
+.variable-input {
+    background-color: var(--color-primary);
+    color: var(--color-tertiary);
+}
+
+.variable-input::selection {
+	background-color: var(--color-tertiary);
+    color: var(--color-primary);
 }

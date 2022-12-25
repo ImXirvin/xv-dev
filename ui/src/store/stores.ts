@@ -41,3 +41,7 @@ export const debugOutputStore = writable([]);
 export const resourceStore = writable([]);
 
 export const listenEsc = writable(true);
+
+export const playerListStore = writable([]);
+
+export const curPlayerDataStore = writable({});

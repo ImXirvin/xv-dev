@@ -35,7 +35,7 @@ function CheckPerms(source)
         DropPlayer(src, 'Unauthorized access to dev menu')
         return
     end
-
+    
     if ConfigForXVDev.StrictMode then
         local identifierTable = GetPlayerIdentifiers(src)
         for k, v in pairs(ConfigForXVDev.Identifiers) do
@@ -57,6 +57,9 @@ function CheckPerms(source)
                             end
                             if v.editRes then
                                 perms.allowedEdit = true
+                            end
+                            if v.managePly then
+                                perms.managePly = true
                             end
                         end
                     end

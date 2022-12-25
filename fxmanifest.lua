@@ -20,11 +20,13 @@ shared_scripts {
 client_script {
   'client/client.lua',
   'client/resources.lua',
+  'client/players.lua',
 }
 server_script {
   "server/config.lua",
   "server/server.lua",
   "server/resources.lua",
+  "server/players.lua",
 }
 
 files {

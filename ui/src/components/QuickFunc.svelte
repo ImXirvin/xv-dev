@@ -275,15 +275,4 @@
         /* white inset box shadow */
         box-shadow: 0 0 0 1px var(--color-tertiary) inset;
     }
-
-.variable-input {
-    background-color: var(--color-primary);
-    color: var(--color-tertiary);
-}
-
-.variable-input::selection {
-	background-color: var(--color-tertiary);
-    color: var(--color-primary);
-}
-
 </style>
