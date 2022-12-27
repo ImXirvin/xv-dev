@@ -5,7 +5,7 @@ game("gta5")
 name("xv-dev")
 author("Xirvin#0985")
 description("FiveM Development Menu.")
-version("2.2.2")
+version("2.2.3")
 repository("https://github.com/ImXirvin/xv-dev")
 
 ui_page("html/index.html")

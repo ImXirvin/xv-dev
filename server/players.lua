@@ -94,7 +94,7 @@ RegisterNetEvent('xv-dev:server:kickPlayer', function(targetID, reason)
         DropPlayer(src, 'Unauthorized access to dev menu')
         return
     end
-    DropPlayer(id, reason .. ' - ' .. GetPlayerName(src)
+    DropPlayer(id, reason .. ' - ' .. GetPlayerName(src))
     local red = false
     local output = 'Player: ' .. GetPlayerName(id) .. ' has been kicked by ' .. GetPlayerName(src) .. ' for ' .. reason
     SendHook('Player Kicked', output, 'red')
