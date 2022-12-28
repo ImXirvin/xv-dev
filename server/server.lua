@@ -20,8 +20,7 @@ CreateThread(function()
 				return
 			end
 			local version = GetResourceMetadata(GetCurrentResourceName(), "version")
-			local findVersion = text:match("version%(\"%d%.%d+%.%d+\"%)")
-			local latestVersion = findVersion:match("%d%.%d+%.%d+")
+			local latestVersion = string.match(text, '%sversion \"(.-)\"')
 			if version ~= latestVersion then
 				print("^1[xv-dev]^7: ^1Your version of xv-dev is outdated. Please update to the latest version.^7")
 				isOutdatedInfo = true
