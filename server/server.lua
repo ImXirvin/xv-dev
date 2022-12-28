@@ -16,8 +16,12 @@ CreateThread(function()
 	PerformHttpRequest(
 		"https://raw.githubusercontent.com/ImXirvin/xv-dev/main/fxmanifest.lua",
 		function(err, text, headers)
+			if err ~= 200 then
+				return
+			end
 			local version = GetResourceMetadata(GetCurrentResourceName(), "version")
-			local latestVersion = string.match(text, "%sversion '(.-)'")
+			local findVersion = text:match("version%(\"%d%.%d+%.%d+\"%)")
+			local latestVersion = findVersion:match("%d%.%d+%.%d+")
 			if version ~= latestVersion then
 				print("^1[xv-dev]^7: ^1Your version of xv-dev is outdated. Please update to the latest version.^7")
 				isOutdatedInfo = true
