@@ -1,13 +1,14 @@
 <script>
   // @ts-ignore
-  import Drawer from "./Drawer.svelte"
+  import Drawer from "../components/Drawer.svelte"
   import LuaExec from "./LuaExec.svelte";
   import Settings from "./Settings.svelte";
   import Resources from "./Resources.svelte";
-  import QuickFunc from "./QuickFunc.svelte";
+  import QuickFunc from "../components/QuickFunc.svelte";
   import { outputMode } from "../store/stores";
   import Output from "./Output.svelte";
   import Players from "./Players.svelte";
+
 
 
 	let moving = false;

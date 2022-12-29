@@ -2,7 +2,7 @@
   import { AceEditor } from "svelte-ace";
   import { LuaHandler } from "../utils/luaHandler";
   import { SendNUI } from "../utils/SendNUI";
-  import { themeStore, codeStore } from "../store/stores";
+  import { themeStore, codeStore, fontSizeStore } from "../store/stores";
   import {tippy} from 'svelte-tippy';
   import 'tippy.js/dist/tippy.css';
   import { tooltip } from "../utils/tooltip";
@@ -43,8 +43,6 @@
   }
 </script>
 
-
-
 <div class="w-full h-full flex flex-col gap-5 z-0">
   <div class="w-full relative h-full">
     <AceEditor
@@ -52,7 +50,8 @@
       height='100%'
       lang="lua"
       theme="{$themeStore}"
-      bind:value={$codeStore} 
+      options={{fontSize: `${$fontSizeStore}rem`}}
+      bind:value={$codeStore}
     />
   </div>
 
@@ -103,15 +102,19 @@
       <span contenteditable="true" rows=1 class="btn-def max-w-fit" bind:innerHTML={source} />
     {/if}
 
-
-
-
+    <div class="flex flex-row gap-2 items-center">
+      <p class="text-3xl font-bold text-white">
+        Font Size:
+      </p>
+      <input class="font-size-input text-3xl font-bold rounded-lg block w-24 text-center py-1.5 px-2.5" type="text" maxlength="4" bind:value={$fontSizeStore}/>
+    </div>
   </div>
 
 </div>
 
-
-
-
-  <style>
-  </style>
+<style>
+  .font-size-input {
+    background-color: var(--color-tertiary);
+    color: var(--color-secondary);
+  }
+</style>

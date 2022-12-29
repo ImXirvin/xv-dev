@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 import { QuickFunctionDefault, ConfigDefault } from "../utils/Defaults";
 
 export const visibility = writable(false);
@@ -14,9 +14,16 @@ themeStore.subscribe((value) => {
 })
 
 //for code
-export const codeStore = writable( localStorage.getItem('code') || "");
+export const codeStore = writable(localStorage.getItem('code') || "");
 codeStore.subscribe((value) => {
     localStorage.setItem('code', value);
+})
+
+const fontSizeLocalStorage: string = 'xv-dev-fontSize';
+//for font size
+export const fontSizeStore: Writable<string> = writable(localStorage.getItem(fontSizeLocalStorage) || "1");
+fontSizeStore.subscribe((value) => {
+    localStorage.setItem(fontSizeLocalStorage, value);
 })
 
 //for variables
