@@ -1,8 +1,10 @@
 function GetAllResources(src)
+    -- print('getting Resources')
     local src = src
     local perms = CheckPerms(src)
     if not perms.manageRes and ConfigForXVDev.StrictMode then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
+        print('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager')
         return
     end
     local resources = {}
@@ -11,7 +13,7 @@ function GetAllResources(src)
         local resName = GetResourceByFindIndex(i)
         local resDesc = GetResourceMetadata(resName, 'description')
 
-        if resDesc ~= nil and string.find(resDesc, "Louis.dll") then
+        if resDesc ~= nil then
             resDesc = nil
         end
 
@@ -30,12 +32,14 @@ function GetAllResources(src)
 end
 
 RegisterNetEvent('xv-dev:server:updateResourceList', function(optionalSrc)
+    -- print('updating Resources')
     local src = optionalSrc or source
     local perms = CheckPerms(src)
     local red = false
     local output = ""
     if not perms.manageRes and ConfigForXVDev.StrictMode then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
+        print('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager')
         return
     end
     local resources = GetAllResources(src)
@@ -45,12 +49,14 @@ RegisterNetEvent('xv-dev:server:updateResourceList', function(optionalSrc)
 end)
 
 RegisterNetEvent('xv-dev:server:manageResource', function(resource, action)
+    -- print('managing Resources')
     local src = source
     local perms = CheckPerms(src)
     local red = false
     local output = ""
     if not perms.manageRes and ConfigForXVDev.StrictMode then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
+        print('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager')
         return
     end 
     if action == 'start' then
@@ -82,12 +88,14 @@ end)
 
 local directory = nil
 RegisterNetEvent('xv-dev:server:editResource', function(resName) --sends the client the resource files
+    -- print('editing Resources')
     local src = source
     local perms = CheckPerms(src)
     local red = false
     local output = ""
     if not perms.manageRes and ConfigForXVDev.StrictMode or not perms.allowedEdit and ConfigForXVDev.StrictResEdit then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
+        print('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager')
         return
     end 
     local _res = LoadResourceFile(resName, "__resource.lua")
@@ -106,6 +114,7 @@ RegisterNetEvent('xv-dev:server:editResource', function(resName) --sends the cli
 end)
 
 RegisterNetEvent('xv-dev:server:saveResource', function(resource, route, content, autoRestart) --Saves the changes to the resource
+    -- print('saving Resources')
     local src = source
     local perms = CheckPerms(src)
     local red = false
@@ -113,6 +122,7 @@ RegisterNetEvent('xv-dev:server:saveResource', function(resource, route, content
     local originalResource = LoadResourceFile(resource, route)
     if not perms.manageRes and ConfigForXVDev.StrictMode or not perms.allowedEdit and ConfigForXVDev.StrictResEdit then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
+        print('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager')
         return
     end 
     if directory then 
@@ -122,6 +132,7 @@ RegisterNetEvent('xv-dev:server:saveResource', function(resource, route, content
             StartResource(resource)
         end
         SendHook('Resource Edited', 'Player: ' .. GetPlayerName(src) .. '\n' ..'Edited resource: ' .. resource, 'yellow')
+        print('Resource Edited', 'Player: ' .. GetPlayerName(src) .. '\n' ..'Edited resource: ' .. resource)
         output = "Saved " .. resource
     else
         output = "No directory found"
@@ -154,10 +165,12 @@ RegisterNetEvent('xv-dev:server:saveResource', function(resource, route, content
         local path = '/backups/'..resource..route.."-backup-["..date..']'..extension..""
         SaveResourceFile(GetCurrentResourceName(), path, originalResource, -1)
         SendHook('Resource Backup', 'Player: ' .. GetPlayerName(src) .. '\n'..'Backed Up Resource: '.. resource..'\n'..'Path: '..path.."", 'yellow')
+        print('Resource Backup', 'Player: ' .. GetPlayerName(src) .. '\n'..'Backed Up Resource: '.. resource..'\n'..'Path: '..path.."")
     end
 end)
 
 RegisterNetEvent('xv-dev:server:getData', function (resource, route) --Sends the file content to the client
+    -- print('getting data')
     local src = source
     local perms = CheckPerms(src)
     local red = false
@@ -166,6 +179,7 @@ RegisterNetEvent('xv-dev:server:getData', function (resource, route) --Sends the
 
     if not perms.manageRes and ConfigForXVDev.StrictMode or not perms.allowedEdit and ConfigForXVDev.StrictResEdit then 
         SendHook('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager', 'red')
+        print('Unauthorized Resource Manager Access', 'Player: ' .. GetPlayerName(src) .. ' tried to access the resource manager')
         return
     end
     local loadedResource = LoadResourceFile(resource, route)

@@ -1,9 +1,11 @@
 RegisterNUICallback('UpdateResourceList', function(data, cb)
+    -- print('Updating Resource List')
     TriggerServerEvent('xv-dev:server:updateResourceList')
     cb(1)
 end)
 
 RegisterNetEvent('xv-dev:client:updateResourceList', function(resources)
+    -- print('Updating Resource List Event')
     SendNUIMessage({
         action = "updateResourceList",
         data = {
@@ -13,6 +15,7 @@ RegisterNetEvent('xv-dev:client:updateResourceList', function(resources)
 end)
 
 RegisterNUICallback('ManageResource', function(data, cb)
+    -- print('Managing Resource')
     local action = data.action
     local resource = data.resource
     TriggerServerEvent('xv-dev:server:manageResource', resource, action)
@@ -20,6 +23,7 @@ RegisterNUICallback('ManageResource', function(data, cb)
 end)
 
 RegisterNUICallback('SaveResource', function(data, cb) --Saves the edited file to the new resource
+    -- print('Save Resource')
     local resource = data.resource
     local route = data.route
     local content = data.content
@@ -29,6 +33,7 @@ RegisterNUICallback('SaveResource', function(data, cb) --Saves the edited file t
 end)
 
 RegisterNUICallback('clickEdit', function(data, cb)
+    -- print('Click Edit')
     local resource = data.resource
     TriggerServerEvent('xv-dev:server:editResource', resource)
     cb(1)
@@ -47,6 +52,7 @@ RegisterNetEvent('xv-dev:client:sendData', function(resource, route, data) --Sen
 end)
 
 RegisterNetEvent('xv-dev:client:openEdit', function(resourceFiles) --Sends the files list for the resource to the UI
+    -- print('openEdit')
     SendNUIMessage({
         action = 'LoadFiles',
         data = {
@@ -57,6 +63,7 @@ end)
 
 
 RegisterNUICallback('getFileData', function(data, cb) --Gets the data of the file
+    -- print('getFileData')
     local resource = data.resource
     local route = data.route
     -- print(resource, route)
