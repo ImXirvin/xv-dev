@@ -26,6 +26,7 @@ end)
 
 RegisterNUICallback('GetPlayers', function(data, cb)
     TriggerEvent('xv:client:updatePlayerList')
+    cb(1)
 end)
 
 local function RetrievePlyInfo(id)

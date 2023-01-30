@@ -43,6 +43,7 @@ RegisterNUICallback("hideUI", function(data, cb)
 		},
 	})
 	SetNuiFocus(false, false)
+	cb(1)
 end)
 
 RegisterNetEvent("xv-dev:client:updateOutput", function(output, eventType, red)
